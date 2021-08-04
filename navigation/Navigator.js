@@ -25,10 +25,10 @@ const defaultSet ={
         headerTintColor: Platform.OS === 'android' ? 'white' : '#70012B'
 }
 const Navigator = createStackNavigator({
-    //Početna,Knjige i Informacije su route names preko kojih pristupamo tim stranicama
-    Početna: Homepage,
-    Knjige: BookList,
-    Informacije: BookInfo
+    //Homepage,Books i Info su route names preko kojih pristupamo tim stranicama
+    Homepage: Homepage,
+    Books: BookList,
+    Info: BookInfo
     //drugi argument nam omogucava da definisemo nacin na koji zelimo da nam header izgleda na svim ekranima
 },{
     defaultNavigationOptions: defaultSet
@@ -37,7 +37,7 @@ const ReadingL = createStackNavigator({
     ListaCitanja:{
         screen: ReadingList
     },
-    Informacije:{
+    Info:{
         screen:BookInfo
     } 
 }, {
@@ -105,7 +105,7 @@ const SwitchNavigator = createSwitchNavigator({
 
 //navigacija sa strane 
 const MainNavigator = createDrawerNavigator({
-    Početna: SwitchNavigator,
+    Homepage: SwitchNavigator,
     LogOut: {
         screen: LogIn,
         navigationOptions:{

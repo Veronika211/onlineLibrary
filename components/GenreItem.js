@@ -1,7 +1,7 @@
 import React, { version } from 'react';
 import {TouchableOpacity,View,Text,StyleSheet,TouchableNativeFeedback,Platform} from 'react-native'
 
-const ListaZanrova = props =>{
+const GenreItem = props =>{
     let TouchableComponent = TouchableOpacity;
     if(Platform.OS === 'android' && Platform.Version >= 21){
         TouchableComponent = TouchableNativeFeedback;
@@ -11,8 +11,8 @@ const ListaZanrova = props =>{
         <View style={styles.listItem} >
         <TouchableComponent onPress = {props.onSelect}>
         <View style={styles.container}>
-            <Text style={styles.naziv} numberOfLines={2}>
-                {props.naziv}
+            <Text style={styles.title} numberOfLines={2}>
+                {props.title}
             </Text>
         </View>
         </TouchableComponent>
@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 15
     },
-    naziv: {
+    title: {
         fontSize: 18,
         fontFamily: 'lora'
     }
 });
 
-export default ListaZanrova;
+export default GenreItem;

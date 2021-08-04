@@ -3,12 +3,12 @@ import Knjiga from '../models/knjiga';
 
 //imamo niz objekata sa njihovim propertijima
 export const ZANROVI = [
-    new Zanr('1','Biografije','#e74c3c'),
-    new Zanr('2','Istorijski','#e74c3c'),
-    new Zanr('3','Klasici','#e74c3c'),
-    new Zanr('4','Kriminalistički','#e74c3c'),
-    new Zanr('5','Ljubavni','#e74c3c'),
-    new Zanr('6','Popularna nauka','#e74c3c')
+    new Zanr(1,'Biografije','#e74c3c'),
+    new Zanr(2,'Istorijski','#e74c3c'),
+    new Zanr(3,'Klasici','#e74c3c'),
+    new Zanr(4,'Kriminalistički','#e74c3c'),
+    new Zanr(5,'Ljubavni','#e74c3c'),
+    new Zanr(6,'Popularna nauka','#e74c3c')
 ];
 
 export const KNJIGE = [

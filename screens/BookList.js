@@ -1,24 +1,43 @@
-import React from 'react';
-import {View,Text,StyleSheet,FlatList} from 'react-native';
-import {ZANROVI, KNJIGE} from '../data/dummy-data'
-import ListaKnjiga from '../components/ListaKnjiga'
+import React,{useState} from 'react';
+import BookItem from '../components/BookItem'
+import axios  from 'axios';
+
+var title = ""; 
 
 const BookList = props => {
-    //omogucava nam da prikazemo podatke o svakoj knjizi u listi
-    const zanrId = props.navigation.getParam('zanrId');
-    const selectedZanr = ZANROVI.find(zanr => zanr.id === zanrId);
-    const prikazaneKnjige = KNJIGE.filter(knjiga => knjiga.zanroviId.indexOf(zanrId) >= 0 )
-    return(
-        <ListaKnjiga podaci={prikazaneKnjige} navigation={props.navigation}/>
+//ucitavamo zanrove iz baze
+const genreId = props.navigation.getParam('genreId');
+const [genres,setGenres] = useState([]);
+    axios.get('https://library-app-fe6ce-default-rtdb.europe-west1.firebasedatabase.app/zanrovi.json').then(
+        response => {
+            const loadedGenres = []
+                for(const key in response.data){
+                    loadedGenres.push({
+                        id: response.data[key].id,
+                        title: response.data[key].title,
+                        books: response.data[key].books
+                    })
+                }
+                setGenres(loadedGenres);
+        })
+        
+        const selectedGenre = genres.filter(genre => genre.id == genreId);
+       
+        var bookData = [];
+        for(const key in selectedGenre){
+            bookData = selectedGenre[key].books;
+            title = selectedGenre[key].title;
+        }
+
+    return (
+        <BookItem data={bookData} navigation={props.navigation}/>
     )
 };
 
+//podesavamo da naslov bude izabrani zanr
 BookList.navigationOptions = (navigationData) => {
-    const zanrId = navigationData.navigation.getParam('zanrId');
-    const selectedZanr = ZANROVI.find(zanr => zanr.id === zanrId);
     return {
-        headerTitle: selectedZanr.naziv,
-        
+        headerTitle: title
     }
 }
 

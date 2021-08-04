@@ -1,16 +1,17 @@
 import React from 'react'
 import {View,FlatList,StyleSheet} from 'react-native'
-import KnjigaZanr from './KnjigaZanr'
+import BookGenre from './BookGenre'
 
-const ListaKnjiga = props =>{
+const BookItem = props => {
+    
     const renderListItem = itemData =>{
-        return <KnjigaZanr
-         naslov={itemData.item.naslov}
-         autor = {itemData.item.autor}
-         slika= {itemData.item.slika} 
+        return <BookGenre
+         title={itemData.item.title}
+         author = {itemData.item.author}
+         img= {itemData.item.img} 
          onSelect ={() => {
-             props.navigation.navigate({routeName:'Informacije', params:{
-                 knjigaId: itemData.item.id,
+             props.navigation.navigate({routeName:'Info', params:{
+                 bookId: itemData.item.id,
                  inList: props.inList
              }})
          }}/>
@@ -18,7 +19,7 @@ const ListaKnjiga = props =>{
 
     return(
         <View style={styles.screen}> 
-           <FlatList data={props.podaci}
+           <FlatList data={props.data}
             keyExtractor={(item,index) => item.id}
             renderItem={renderListItem}
             style={{width:'100%'}}
@@ -35,4 +36,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ListaKnjiga;
+export default BookItem;

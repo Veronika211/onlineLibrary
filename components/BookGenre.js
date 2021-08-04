@@ -1,19 +1,19 @@
 import React from 'react';
 import {TouchableOpacity,View,Text,StyleSheet,ImageBackground} from 'react-native'
 
-const KnjigaZanr = props =>{
+const BookGenre = props =>{
     return(
         <View style={styles.knjiga}>
         <TouchableOpacity onPress = {props.onSelect}>
         <View>
             <View style={{...styles.row,...styles.knjigaHeader}}>
-                <ImageBackground source={{uri:props.slika}} style={styles.slika}/>
+                <ImageBackground source={{uri:props.img}} style={styles.slika}/>
                 </View>
                 <View style={{...styles.row,...styles.knjigaOpis,...styles.naslov}}>
-                    <Text>{props.naslov}</Text>
+                    <Text>{props.title}</Text>
                     </View>
                     <View style={{...styles.row,...styles.knjigaOpis}}>
-                    <Text>{props.autor}</Text>
+                    <Text>{props.author}</Text>
                     </View>
                
         </View>
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
    
 });
 
-export default KnjigaZanr;
+export default BookGenre;
