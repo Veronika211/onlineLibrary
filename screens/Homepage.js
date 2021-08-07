@@ -1,27 +1,20 @@
-import React,{useState} from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
-import { ZANROVI } from '../data/dummy-data';
+import React,{useEffect} from 'react';
+import { StyleSheet,FlatList } from 'react-native';
 import GenreItem from '../components/GenreItem';
 import { DrawerActions } from 'react-navigation-drawer';
 import { Item, HeaderButtons } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/UI/HeaderButton';
-import axios  from 'axios';
+import { loadGenres } from '../store/actions';
+import { useSelector, useDispatch } from 'react-redux'
 
 const Homepage = props => {
-    const [genres,setGenres] = useState([]);
-    axios.get('https://library-app-fe6ce-default-rtdb.europe-west1.firebasedatabase.app/zanrovi.json').then(
-        response => {
-            const loadedGenres = []
-                for(const key in response.data){
-                    loadedGenres.push({
-                        id: response.data[key].id,
-                        title: response.data[key].title
-                    })
-                }
-                setGenres(loadedGenres);
-        })
-       
+    const genres = useSelector(state => state.books.genres);
+    const dispatch = useDispatch();
 
+     useEffect(()=>{
+        dispatch(loadGenres())        
+     },[dispatch])
+   
     const renderListItem = itemData => {
         return (
             <GenreItem title={itemData.item.title} onSelect={() => {
@@ -36,12 +29,15 @@ const Homepage = props => {
             }} />
         )
     }
+    
     return (
+        
         <FlatList
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             data={genres}
             renderItem={renderListItem}
             numColumns={1} />
+            
     )
 };
 
@@ -53,7 +49,8 @@ Homepage.navigationOptions = (navigationData) => {
                 onPress={() => {
                     navigationData.navigation.toggleDrawer();
                 }} />
-        </HeaderButtons>
+        </HeaderButtons>,
+        headerTitle: 'Početna'
     }
 }
 

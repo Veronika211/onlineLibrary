@@ -1,15 +1,16 @@
-import {KNJIGE} from '../data/dummy-data'
-import { ADD_READING_LIST } from './actions';
+import { ADD_READING_LIST, LOAD_BOOKS, LOAD_GENRES } from './actions';
 import {REMOVE_READING_LIST} from './actions';
 
 const initialState = {
     //postavljamo pocetno stanje na stanje ucitano iz baze
-    books: KNJIGE,
+    bookData: [],
     //postavljamo prazan niz jer jos nismo nista ubacili u listu citanja
-    readingList: []
+    readingList: [],
+    genres:[]
 }
 
-const booksReducer = (state = initialState,action) =>{
+const booksReducer = (state = initialState, action) =>{
+
     switch(action.type){
         case ADD_READING_LIST:
             //proveravamo da li ima vec u nizu ove knjige
@@ -24,11 +25,11 @@ const booksReducer = (state = initialState,action) =>{
                 }
             }
             else {
-                const book = state.books.find(book => book.id === action.bookId)
+                const book = state.bookData.find(book => book.id === action.bookId)
                 return {... state, readingList: state.readingList.concat(book)}
             }
          } else {
-                const book = state.books.find(book => book.id === action.bookId)
+                const book = state.bookData.find(book => book.id === action.bookId)
                 return {... state, readingList: state.readingList.concat(book)}
             }
 
@@ -40,10 +41,20 @@ const booksReducer = (state = initialState,action) =>{
                 ... state,
                 readingList: updatedList
             }
+            
+            case LOAD_BOOKS:
+            return{
+                ...state,
+                bookData: action.bookData
+            }
+            case LOAD_GENRES:
+                return{
+                    ...state,
+                    genres: action.genreData
+                }
             default:
             return state;
     }
-    return state;
 }
 
 export default booksReducer;

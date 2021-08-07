@@ -9,6 +9,7 @@ const BookItem = props => {
          title={itemData.item.title}
          author = {itemData.item.author}
          img= {itemData.item.img} 
+         id = {itemData.item.id}
          onSelect ={() => {
              props.navigation.navigate({routeName:'Info', params:{
                  bookId: itemData.item.id,
@@ -20,7 +21,7 @@ const BookItem = props => {
     return(
         <View style={styles.screen}> 
            <FlatList data={props.data}
-            keyExtractor={(item,index) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={renderListItem}
             style={{width:'100%'}}
            />

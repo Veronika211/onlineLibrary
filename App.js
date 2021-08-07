@@ -3,20 +3,18 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Font from 'expo-font';
 import Navigator from './navigation/Navigator'
-import { useScreens } from 'react-native-screens'
 import AppLoading from 'expo-app-loading';
-import { createStore, combineReducers } from 'redux'
-//useScreens();
+import { createStore, combineReducers,applyMiddleware } from 'redux'
 import booksReducer from './store/books'
 import { Provider } from 'react-redux'
-
+import ReduxThunk from 'redux-thunk'
 
 const rootReducer = combineReducers({
   books: booksReducer
 })
 
 //cuvamo stanje globalno ovde 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer,applyMiddleware(ReduxThunk));
 
 const fetchFonts = () => {
   //omogucava nam da ucitamo fontove i prosledjujemo odakle da ih ucita

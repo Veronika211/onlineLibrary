@@ -34,7 +34,7 @@ const Navigator = createStackNavigator({
     defaultNavigationOptions: defaultSet
 });
 const ReadingL = createStackNavigator({
-    ListaCitanja:{
+    ReadingList:{
         screen: ReadingList
     },
     Info:{
@@ -59,7 +59,7 @@ const ScreenConfig = {
             //activeTintColor: '#BA275E'
         }
     },
-    ListaCitanja: {
+    ReadingList: {
         screen: ReadingL,
         navigationOptions:{
             tabBarLabel: 'Lista čitanja',

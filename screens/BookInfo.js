@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import {useEffect, useCallback } from 'react';
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { Ionicons, Entypo } from '@expo/vector-icons';
@@ -7,56 +7,59 @@ import { useSelector, useDispatch } from 'react-redux'
 import {removeFromReadingList, toggleReadingList} from '../store/actions';
 
 const BookInfo = props => {
-    //set params koristimo da komuniciramo izmedju komponenti i navigationOptionsa
+    const bookData = useSelector(state => state.books.bookData);
+    const bookId = props.navigation.getParam('bookId');
 
-    const availableBooks = useSelector(state => state.books.books);
-    const knjigaId = props.navigation.getParam('knjigaId');
-    const selectedBook = availableBooks.find(knjiga => knjiga.id === knjigaId);
-    const uListi = props.navigation.getParam('inList')
-    //preko ovog paramsa saljemo podatke u header navigation
-    useEffect(() => {
-        props.navigation.setParams({ bookTitle: selectedBook.naslov})
-    
-    }, [selectedBook])
+    for(let i=0;i<bookData.length;i++){
+        var match = bookData[i].find(book => book.id === bookId)
+        if(match) {
+            break;
+        }
+    }
+    const selectedBook = match;
 
-    const dispatch = useDispatch();
+    useEffect(() => { 
+    props.navigation.setParams({ bookTitle: selectedBook.title})
+    },[selectedBook])
 
-    const addToReadingList = useCallback(() =>{
-        dispatch(toggleReadingList(knjigaId))
-    },[dispatch,knjigaId])
+
+const inList = false;
+ //   const inList = props.navigation.getParam('inList')
+//     const addToReadingList = useCallback(() =>{
+//         dispatch(toggleReadingList(bookId))
+//     },[dispatch,bookId])
    
-    const deleteFromReadingList = useCallback(()=>{
-        dispatch(removeFromReadingList(knjigaId))
-    },[dispatch,knjigaId])
+//     const deleteFromReadingList = useCallback(()=>{
+//         dispatch(removeFromReadingList(bookId))
+//     },[dispatch,bookId])
 
     return (
-        <ScrollView>
-            <Image source={{ uri: selectedBook.slika }} style={styles.img} />
+          <ScrollView> 
+            <Image source={{ uri: selectedBook.img }} style={styles.img} />
             <View style={styles.screen}>
-                <Text style={styles.naslov}>{selectedBook.naslov}</Text>
-                <Text style={styles.autor}>{selectedBook.autor}</Text>
-                <Text style={styles.cena}>{selectedBook.cena} din.</Text>
-                {uListi&& 
-             <TouchableOpacity onPress={() => {deleteFromReadingList()}}>
+                 <Text style={styles.naslov}>{selectedBook.title}</Text>
+                 <Text style={styles.autor}>{selectedBook.author}</Text>
+                 <Text style={styles.cena}>{selectedBook.price} din.</Text>
+                 {inList&& 
+               // onPress={() => {deleteFromReadingList()}}
+             <TouchableOpacity >
             <Ionicons name="trash-outline" size={30} color="black" style={styles.ikonica} />
             <Text>Obrišite iz liste čitanja</Text>
             </TouchableOpacity>}
-            {!uListi &&
+            {!inList &&
                 <TouchableOpacity onPress={() => {addToReadingList()}}>
                     <Ionicons name="add-circle-outline" size={30} color="black" style={styles.ikonica} />
                     <Text>Dodajte u listu čitanja</Text>
                 </TouchableOpacity>}
             </View>
             <View>
-                <Text>Opis:{selectedBook.opis}</Text>
-            </View>
-        </ScrollView>
+                <Text>Opis:{selectedBook.description}</Text>
+            </View> 
+            </ScrollView>       
     )
 };
 
 BookInfo.navigationOptions = (navigationData) => {
-    //const knjigaId = navigationData.navigation.getParam('knjigaId');
-    //const selectedKnjiga = KNJIGE.find(knjiga => knjiga.id === knjigaId);
     const bookTitle = navigationData.navigation.getParam('bookTitle');
    // const addToList = navigationData.navigation.getParam('addToList')
     return {
