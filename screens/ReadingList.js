@@ -7,8 +7,11 @@ import HeaderButton from '../components/UI/HeaderButton';
 
 const ReadingList = props => {
     const readingListBooks = useSelector(state => state.books.readingList);
-    //const prikazKnjige = KNJIGE.filter(knjiga => knjiga.id === '1' || knjiga.id === '5');
-    return <BookItem podaci={readingListBooks} navigation={props.navigation} inList = {true}/>
+    return readingListBooks.length > 0 ? 
+    <BookItem data={readingListBooks} navigation={props.navigation} inList = {true}/> : 
+    <View style={styles.noBooks}>
+    <Text>Nema knjiga u listi citanja!</Text>
+    </View>
 };
 
 
@@ -27,10 +30,11 @@ ReadingList.navigationOptions = navigationData => {
 }
 
 const styles = StyleSheet.create({
-    screen:{
+    noBooks:{
         flex:1,
+        fontSize: 18,
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
 });
 export default ReadingList;

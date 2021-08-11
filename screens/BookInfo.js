@@ -4,11 +4,12 @@ import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import {removeFromReadingList, toggleReadingList} from '../store/actions';
+import {removeFromReadingList, toggleReadingList} from '../store/actions/actions';
 
 const BookInfo = props => {
     const bookData = useSelector(state => state.books.bookData);
     const bookId = props.navigation.getParam('bookId');
+    const dispatch = useDispatch();
 
     for(let i=0;i<bookData.length;i++){
         var match = bookData[i].find(book => book.id === bookId)
@@ -21,17 +22,16 @@ const BookInfo = props => {
     useEffect(() => { 
     props.navigation.setParams({ bookTitle: selectedBook.title})
     },[selectedBook])
-
-
-const inList = false;
- //   const inList = props.navigation.getParam('inList')
-//     const addToReadingList = useCallback(() =>{
-//         dispatch(toggleReadingList(bookId))
-//     },[dispatch,bookId])
    
-//     const deleteFromReadingList = useCallback(()=>{
-//         dispatch(removeFromReadingList(bookId))
-//     },[dispatch,bookId])
+   const inList = props.navigation.getParam('inList')
+
+    const addToReadingList = useCallback(() =>{
+        dispatch(toggleReadingList(bookId))
+    },[dispatch,bookId])
+   
+    const deleteFromReadingList = useCallback(()=>{
+        dispatch(removeFromReadingList(bookId))
+    },[dispatch,bookId])
 
     return (
           <ScrollView> 
@@ -40,9 +40,8 @@ const inList = false;
                  <Text style={styles.naslov}>{selectedBook.title}</Text>
                  <Text style={styles.autor}>{selectedBook.author}</Text>
                  <Text style={styles.cena}>{selectedBook.price} din.</Text>
-                 {inList&& 
-               // onPress={() => {deleteFromReadingList()}}
-             <TouchableOpacity >
+                 {inList&&  
+             <TouchableOpacity  onPress={() => {deleteFromReadingList()}}>
             <Ionicons name="trash-outline" size={30} color="black" style={styles.ikonica} />
             <Text>Obrišite iz liste čitanja</Text>
             </TouchableOpacity>}
@@ -53,7 +52,7 @@ const inList = false;
                 </TouchableOpacity>}
             </View>
             <View>
-                <Text>Opis:{selectedBook.description}</Text>
+                <Text style={styles.description}>Opis:{selectedBook.description}</Text>
             </View> 
             </ScrollView>       
     )
@@ -61,7 +60,6 @@ const inList = false;
 
 BookInfo.navigationOptions = (navigationData) => {
     const bookTitle = navigationData.navigation.getParam('bookTitle');
-   // const addToList = navigationData.navigation.getParam('addToList')
     return {
         headerTitle: bookTitle
     }
@@ -85,6 +83,9 @@ const styles = StyleSheet.create({
     img: {
         width: '100%',
         height: 350
+    },
+    description: {
+        margin: 15
     }
 });
 export default BookInfo;

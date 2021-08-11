@@ -1,5 +1,6 @@
-import { ADD_READING_LIST, LOAD_BOOKS, LOAD_GENRES } from './actions';
-import {REMOVE_READING_LIST} from './actions';
+import { ADD_READING_LIST, LOAD_BOOKS, LOAD_GENRES } from '../actions/actions';
+import {REMOVE_READING_LIST} from '../actions/actions';
+import {Alert} from 'react-native'
 
 const initialState = {
     //postavljamo pocetno stanje na stanje ucitano iz baze
@@ -17,19 +18,25 @@ const booksReducer = (state = initialState, action) =>{
             if(state.readingList.length >0){
             const existingIndex = state.readingList.findIndex(book => book.id === action.bookId);
             if(existingIndex >= 0){
+                /*
                 const updatedList = [...state.readingList];
                 updatedList.splice(existingIndex,1);
                 return {
                     ...state,
                     readingList: updatedList
-                }
+                }*/ Alert.alert("Greska","Ova knjiga se vec nalazi u listi citanja",[{text: 'OK'}])
+                return state;
             }
             else {
                 const book = state.bookData.find(book => book.id === action.bookId)
                 return {... state, readingList: state.readingList.concat(book)}
             }
          } else {
-                const book = state.bookData.find(book => book.id === action.bookId)
+             for(let i = 0; i<state.bookData.length;i++){
+                var match = state.bookData[i].find(book => book.id === action.bookId)
+                if(match) break;
+             }
+             const book = match;
                 return {... state, readingList: state.readingList.concat(book)}
             }
 

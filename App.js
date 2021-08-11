@@ -5,12 +5,15 @@ import * as Font from 'expo-font';
 import Navigator from './navigation/Navigator'
 import AppLoading from 'expo-app-loading';
 import { createStore, combineReducers,applyMiddleware } from 'redux'
-import booksReducer from './store/books'
+import booksReducer from './store/reducers/books'
 import { Provider } from 'react-redux'
 import ReduxThunk from 'redux-thunk'
+import authReducer from './store/reducers/auth'
+import NavigationContainer from './navigation/NavigationContainer';
 
 const rootReducer = combineReducers({
-  books: booksReducer
+  books: booksReducer,
+  auth: authReducer
 })
 
 //cuvamo stanje globalno ovde 
@@ -37,7 +40,7 @@ export default function App() {
   //i sve stranice kojima je potreban state koji se nalazi u store-u
   return (
     <Provider store={store}>
-      <Navigator />
+      <NavigationContainer/>
     </Provider>
   )
 }

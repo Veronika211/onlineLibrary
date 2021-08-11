@@ -38,7 +38,7 @@ export const loadBooks = () => {
         for(const key in loadedGenres){
         books.push(loadedGenres[key].books);
         } 
-       console.log(books.length)
+   
     dispatch({
         type: LOAD_BOOKS,
         bookData: books
