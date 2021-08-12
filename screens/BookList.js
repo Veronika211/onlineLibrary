@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react';
 import BookItem from '../components/BookItem'
-import {useDispatch,useSelector} from 'react-redux'
-import { loadBooks } from '../store/actions/actions';
+import {useSelector} from 'react-redux'
+
 var title = ""; 
 
 const BookList = props => {
@@ -14,11 +14,6 @@ var title = props.navigation.getParam('genreTitle');
     for(const key in selectedGenre){
     bookData = selectedGenre[key].books;
         }
-
-        const dispatch = useDispatch();
-        useEffect(() => {
-            dispatch(loadBooks());
-        },[dispatch])
 
     return (
         <BookItem data={bookData} navigation={props.navigation}/>

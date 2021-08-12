@@ -3,7 +3,6 @@ import {View,FlatList,StyleSheet} from 'react-native'
 import BookGenre from './BookGenre'
 
 const BookItem = props => {
-    
     const renderListItem = itemData =>{
         return <BookGenre
          title={itemData.item.title}

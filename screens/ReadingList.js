@@ -6,7 +6,7 @@ import { Item, HeaderButtons } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/UI/HeaderButton';
 
 const ReadingList = props => {
-    const readingListBooks = useSelector(state => state.books.readingList);
+    const readingListBooks = useSelector(state => state.books.readingList);  
     return readingListBooks.length > 0 ? 
     <BookItem data={readingListBooks} navigation={props.navigation} inList = {true}/> : 
     <View style={styles.noBooks}>

@@ -4,21 +4,21 @@ import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import {removeFromReadingList, toggleReadingList} from '../store/actions/actions';
+import * as readingListActions from '../store/actions/readingList'
 
 const BookInfo = props => {
     const bookData = useSelector(state => state.books.bookData);
     const bookId = props.navigation.getParam('bookId');
+
     const dispatch = useDispatch();
 
     for(let i=0;i<bookData.length;i++){
-        var match = bookData[i].find(book => book.id === bookId)
-        if(match) {
+        var selectedBook = bookData[i].find(book => book.id === bookId)
+        if(selectedBook) {
             break;
         }
     }
-    const selectedBook = match;
-
+    
     useEffect(() => { 
     props.navigation.setParams({ bookTitle: selectedBook.title})
     },[selectedBook])
@@ -26,11 +26,12 @@ const BookInfo = props => {
    const inList = props.navigation.getParam('inList')
 
     const addToReadingList = useCallback(() =>{
-        dispatch(toggleReadingList(bookId))
+        dispatch(readingListActions.addBook(bookId))
     },[dispatch,bookId])
    
     const deleteFromReadingList = useCallback(()=>{
-        dispatch(removeFromReadingList(bookId))
+        dispatch(readingListActions.deleteBook(bookId))
+        props.navigation.navigate('ReadingList');
     },[dispatch,bookId])
 
     return (

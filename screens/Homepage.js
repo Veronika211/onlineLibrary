@@ -4,15 +4,17 @@ import GenreItem from '../components/GenreItem';
 import { DrawerActions } from 'react-navigation-drawer';
 import { Item, HeaderButtons } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/UI/HeaderButton';
-import { loadGenres } from '../store/actions/actions';
+import * as bookActions from '../store/actions/actions';
 import { useSelector, useDispatch } from 'react-redux'
-
+import * as readingListActions from '../store/actions/readingList'
 const Homepage = props => {
     const genres = useSelector(state => state.books.genres);
     const dispatch = useDispatch();
     
      useEffect(()=>{
-        dispatch(loadGenres())        
+        dispatch(bookActions.loadGenres())
+        dispatch(readingListActions.fetchList());  
+        dispatch(bookActions.loadBooks());     
      },[dispatch])
    
     const renderListItem = itemData => {

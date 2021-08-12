@@ -1,22 +1,5 @@
-export const ADD_READING_LIST = 'ADD_READING_LIST';
-export const REMOVE_READING_LIST = 'REMOVE_READING_LIST';
 export const LOAD_BOOKS = 'LOAD_BOOKS';
 export const LOAD_GENRES = 'LOAD_GENRES';
-
-export const toggleReadingList = (id) => {
-    return {
-        type: ADD_READING_LIST,
-        bookId: id
-    }
-} 
-
-export const removeFromReadingList = (id) => {
-    return {
-        type: REMOVE_READING_LIST,
-        bookId: id
-    }
-}
-
 
 export const loadBooks = () => {
     return async dispatch => {

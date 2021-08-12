@@ -40,7 +40,7 @@ export const signup = (email, password) => {
     }
 
     const resData = await response.json();
-    console.log(resData);
+   
     dispatch(
       authenticate(
         resData.localId,
@@ -85,7 +85,7 @@ export const login = (email, password) => {
     }
 
     const resData = await response.json();
-    console.log(resData);
+    
     dispatch(
       authenticate(
         resData.localId,
@@ -116,7 +116,7 @@ const setLogoutTimer = (expirationTime) => {
   return (dispatch) => {
     timer = setTimeout(() => {
       dispatch(logout());
-    }, expirationTime/1000);
+    }, expirationTime);
   };
 };
 
