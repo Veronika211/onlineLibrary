@@ -4,9 +4,10 @@ import GenreItem from '../components/GenreItem';
 import { DrawerActions } from 'react-navigation-drawer';
 import { Item, HeaderButtons } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/UI/HeaderButton';
-import * as bookActions from '../store/actions/actions';
+import * as bookActions from '../store/actions/books';
 import { useSelector, useDispatch } from 'react-redux'
 import * as readingListActions from '../store/actions/readingList'
+
 const Homepage = props => {
     const genres = useSelector(state => state.books.genres);
     const dispatch = useDispatch();
@@ -26,7 +27,8 @@ const Homepage = props => {
                     //prosledi se njegov id i samim tim se ucitaju podaci vezani za njega
                     params: {
                         genreId: itemData.item.id,
-                        genreTitle: itemData.item.title
+                        genreTitle: itemData.item.title,
+                        genreKey: itemData.item.key
                     }
                 })
             }} />

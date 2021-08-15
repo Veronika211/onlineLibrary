@@ -1,4 +1,4 @@
-import { LOAD_BOOKS, LOAD_GENRES } from "../actions/actions";
+import { LOAD_BOOKS, LOAD_GENRES } from "../actions/books";
 import { Alert } from "react-native";
 import { LOAD_LIST, ADD_BOOK, REMOVE_BOOK } from "../actions/readingList";
 

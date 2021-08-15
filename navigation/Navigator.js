@@ -14,6 +14,7 @@ import LogIn from "../screens/LogIn";
 import StartUp from "../screens/StartUp";
 import { useDispatch } from "react-redux";
 import * as authActions from '../store/actions/auth'
+import CommentsEdit from "../screens/CommentsEdit";
 
 const defaultSet = {
   headerStyle: {
@@ -33,6 +34,7 @@ const Navigator = createStackNavigator(
     Homepage: Homepage,
     Books: BookList,
     Info: BookInfo,
+    Comment: CommentsEdit
     //drugi argument nam omogucava da definisemo nacin na koji zelimo da nam header izgleda na svim ekranima
   },
   {
@@ -107,27 +109,14 @@ const FooterNavigator =
           activeTintColor: "#70012B",
         },
       });
+      
 const LogInNavigator = createStackNavigator({
   LogIn: LogIn,
 });
 
-//ovo nam sluzi za prelaz izmedju login stranice i pocetne
-const SwitchNavigator = createSwitchNavigator({
-  LogIn: LogInNavigator,
-  Library: FooterNavigator,
-});
-
-//navigacija sa strane
 const MainNavigator = createDrawerNavigator(
   {
-    StartUp: StartUp,
-    Homepage: SwitchNavigator,
-    // LogOut: {
-    //   screen: LogIn,
-    //   navigationOptions: {
-    //     drawerLabel: "Odjavi se",
-    //   },
-    // },
+    Homepage: FooterNavigator,
   },
   {
     contentOptions: {
@@ -152,4 +141,12 @@ const MainNavigator = createDrawerNavigator(
     }
   }
 );
-export default createAppContainer(MainNavigator);
+//ovo nam sluzi za prelaz izmedju login stranice i pocetne
+const SwitchNavigator = createSwitchNavigator({
+  StartUp: StartUp,
+  LogIn: LogInNavigator,
+  Library: MainNavigator,
+});
+
+
+export default createAppContainer(SwitchNavigator);

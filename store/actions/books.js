@@ -1,3 +1,5 @@
+import Book from "../../models/book";
+import Comment from "../../models/comment"
 export const LOAD_BOOKS = 'LOAD_BOOKS';
 export const LOAD_GENRES = 'LOAD_GENRES';
 
@@ -12,16 +14,38 @@ export const loadBooks = () => {
     
         for (const key in resData) {
           loadedGenres.push({
+              key: key,
               title: resData[key].title,
               id: resData[key].id,
               books: resData[key].books
           })
         }
         const books = [];
+        
+        
         for(const key in loadedGenres){
-        books.push(loadedGenres[key].books);
+         for(const key2 in loadedGenres[key].books){
+          const comments = [];
+          if(loadedGenres[key].books[key2].comments){
+            for(const key3 in loadedGenres[key].books[key2].comments){
+              comments.push(new Comment(key3,loadedGenres[key].books[key2].comments[key3].mail,
+                loadedGenres[key].books[key2].comments[key3].bookId,
+                loadedGenres[key].books[key2].comments[key3].text,
+                loadedGenres[key].books[key2].comments[key3].mark,
+                loadedGenres[key].books[key2].comments[key3].date
+              ))
+            }
+          }
+          books.push(new Book(key2,loadedGenres[key].books[key2].id,
+            loadedGenres[key].books[key2].title,
+            loadedGenres[key].books[key2].img,
+            loadedGenres[key].books[key2].author,
+            loadedGenres[key].books[key2].description,
+            loadedGenres[key].books[key2].price,
+           comments))
+         }
         } 
-   
+       
     dispatch({
         type: LOAD_BOOKS,
         bookData: books
@@ -39,6 +63,7 @@ export const loadGenres = () => {
     
         for (const key in resData) {
           loadedGenres.push({
+              key: key,
               title: resData[key].title,
               id: resData[key].id,
               books: resData[key].books

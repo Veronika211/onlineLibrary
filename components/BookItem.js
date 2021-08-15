@@ -1,8 +1,11 @@
 import React from 'react'
 import {View,FlatList,StyleSheet} from 'react-native'
 import BookGenre from './BookGenre'
+import { useDispatch } from 'react-redux'
+import * as commentsActions from "../store/actions/comments";
 
 const BookItem = props => {
+    const dispatch = useDispatch();
     const renderListItem = itemData =>{
         return <BookGenre
          title={itemData.item.title}
@@ -10,9 +13,11 @@ const BookItem = props => {
          img= {itemData.item.img} 
          id = {itemData.item.id}
          onSelect ={() => {
+             dispatch(commentsActions.loadComments(itemData.item.id));
              props.navigation.navigate({routeName:'Info', params:{
                  bookId: itemData.item.id,
-                 inList: props.inList
+                 inList: props.inList,
+                 genreKey: props.genreKey
              }})
          }}/>
     }

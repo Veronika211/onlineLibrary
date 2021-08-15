@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import * as authActions from "../store/actions/auth";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,7 +11,7 @@ const StartUp = (props) => {
     const tryLogin = async () => {
       const userData = await AsyncStorage.getItem("userData");
       if (!userData) {
-        props.navigation.navigate("LogIn");
+        props.navigation.navigate('LogIn');
         return;
       }
       const transformedData = JSON.parse(userData);
@@ -23,13 +19,12 @@ const StartUp = (props) => {
       const expirationDate = new Date(expiryDate);
 
       if (expirationDate <= new Date() || !token || !userId) {
-        props.navigation.navigate("LogIn");
+        props.navigation.navigate('LogIn');
         return;
       }
 
       const expirationTime = expirationDate.getTime() - new Date().getTime();
-     
-      props.navigation.navigate("Library");
+      props.navigation.navigate('Library');
       dispatch(authActions.authenticate(userId, token, expirationTime));
     };
 

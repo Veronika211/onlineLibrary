@@ -1,14 +1,13 @@
-//'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7_LBEKpnHAuNFlqhtrmg1cz07RMv_Ot4',
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export const LOGOUT = "LOGOUT";
 export const AUTHENTICATE = "AUTHENTICATE";
 
 let timer;
 
-export const authenticate = (userId, token, expiryTime) => {
+export const authenticate = (userId, token, email,expiryTime) => {
   return (dispatch) => {
     dispatch(setLogoutTimer(expiryTime));
-    dispatch({ type: AUTHENTICATE, userId: userId, token: token });
+    dispatch({ type: AUTHENTICATE, userId: userId, email:email,token: token });
   };
 };
 
@@ -45,13 +44,14 @@ export const signup = (email, password) => {
       authenticate(
         resData.localId,
         resData.idToken,
+        email,
         parseInt(resData.expiresIn) * 1000
       )
     );
     const expirationDate = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
     );
-    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate,email);
   };
 };
 
@@ -90,13 +90,14 @@ export const login = (email, password) => {
       authenticate(
         resData.localId,
         resData.idToken,
+        email,
         parseInt(resData.expiresIn) * 1000
       )
     );
     const expirationDate = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
     );
-    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate,email);
   };
 };
 
@@ -120,13 +121,14 @@ const setLogoutTimer = (expirationTime) => {
   };
 };
 
-const saveDataToStorage = (token, userId, expirationDate) => {
+const saveDataToStorage = (token, userId, expirationDate,email) => {
   AsyncStorage.setItem(
     "userData",
     JSON.stringify({
       token: token,
       userId: userId,
       expiryDate: expirationDate.toISOString(),
+      email: email
     })
   );
 };

@@ -1,92 +1,125 @@
-import {useEffect, useCallback } from 'react';
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
-import { Ionicons, Entypo } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
-import * as readingListActions from '../store/actions/readingList'
+import { useEffect, useCallback } from "react";
+import React from "react";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import * as readingListActions from "../store/actions/readingList";
+import CommentList from "../components/CommentList";
 
-const BookInfo = props => {
-    const bookData = useSelector(state => state.books.bookData);
-    const bookId = props.navigation.getParam('bookId');
+const BookInfo = (props) => {
+  const bookData = useSelector((state) => state.books.bookData);
+  const bookId = props.navigation.getParam("bookId");
+  const dispatch = useDispatch();
+  const genreKey = props.navigation.getParam("genreKey");
+  const comments = useSelector((state) => state.comments.comments);
+ console.log(comments)
 
-    const dispatch = useDispatch();
+  var selectedBook = bookData.find((book) => book.id === bookId);
+  const bookKey = selectedBook.key;
 
-    for(let i=0;i<bookData.length;i++){
-        var selectedBook = bookData[i].find(book => book.id === bookId)
-        if(selectedBook) {
-            break;
-        }
-    }
-    
-    useEffect(() => { 
-    props.navigation.setParams({ bookTitle: selectedBook.title})
-    },[selectedBook])
-   
-   const inList = props.navigation.getParam('inList')
+  useEffect(() => {
+    props.navigation.setParams({ bookTitle: selectedBook.title });
+  }, [selectedBook]);
 
-    const addToReadingList = useCallback(() =>{
-        dispatch(readingListActions.addBook(bookId))
-    },[dispatch,bookId])
-   
-    const deleteFromReadingList = useCallback(()=>{
-        dispatch(readingListActions.deleteBook(bookId))
-        props.navigation.navigate('ReadingList');
-    },[dispatch,bookId])
+  const inList = props.navigation.getParam("inList");
 
-    return (
-          <ScrollView> 
-            <Image source={{ uri: selectedBook.img }} style={styles.img} />
-            <View style={styles.screen}>
-                 <Text style={styles.naslov}>{selectedBook.title}</Text>
-                 <Text style={styles.autor}>{selectedBook.author}</Text>
-                 <Text style={styles.cena}>{selectedBook.price} din.</Text>
-                 {inList&&  
-             <TouchableOpacity  onPress={() => {deleteFromReadingList()}}>
-            <Ionicons name="trash-outline" size={30} color="black" style={styles.ikonica} />
+  const addToReadingList = useCallback(() => {
+    dispatch(readingListActions.addBook(bookId));
+  }, [dispatch, bookId]);
+
+  const deleteFromReadingList = useCallback(() => {
+    dispatch(readingListActions.deleteBook(bookId));
+    props.navigation.navigate("ReadingList");
+  }, [dispatch, bookId]);
+
+  return (
+    <ScrollView>
+      <Image source={{ uri: selectedBook.img }} style={styles.img} />
+      <View style={styles.screen}>
+        <Text style={styles.naslov}>{selectedBook.title}</Text>
+        <Text style={styles.autor}>{selectedBook.author}</Text>
+        <Text style={styles.cena}>{selectedBook.price} din.</Text>
+        {inList && (
+          <TouchableOpacity
+            onPress={() => {
+              deleteFromReadingList();
+            }}
+          >
+            <Ionicons
+              name="trash-outline"
+              size={30}
+              color="black"
+              style={styles.ikonica}
+            />
             <Text>Obrišite iz liste čitanja</Text>
-            </TouchableOpacity>}
-            {!inList &&
-                <TouchableOpacity onPress={() => {addToReadingList()}}>
-                    <Ionicons name="add-circle-outline" size={30} color="black" style={styles.ikonica} />
-                    <Text>Dodajte u listu čitanja</Text>
-                </TouchableOpacity>}
-            </View>
-            <View>
-                <Text style={styles.description}>Opis:{selectedBook.description}</Text>
-            </View> 
-            </ScrollView>       
-    )
+          </TouchableOpacity>
+        )}
+        {!inList && (
+          <TouchableOpacity
+            onPress={() => {
+              addToReadingList();
+            }}
+          >
+            <Ionicons
+              name="add-circle-outline"
+              size={30}
+              color="black"
+              style={styles.ikonica}
+            />
+            <Text>Dodajte u listu čitanja</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <View>
+        <Text style={styles.description}>Opis:{selectedBook.description}</Text>
+      </View>
+      {comments ? 
+      <CommentList data={comments} navigation={props.navigation} /> : <Text>Nema komentara.</Text>}
+      <TouchableOpacity
+        onPress={() => {
+          props.navigation.navigate("Comment", {
+            bookId: bookId,
+            bookKey: bookKey,
+            genreKey: genreKey,
+          });
+        }}
+      >
+        <Ionicons name="chatbox-ellipses-outline" size={50} />
+        <Text>Dodajte komentar</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
 };
 
 BookInfo.navigationOptions = (navigationData) => {
-    const bookTitle = navigationData.navigation.getParam('bookTitle');
-    return {
-        headerTitle: bookTitle
-    }
+  const bookTitle = navigationData.navigation.getParam("bookTitle");
+  return {
+    headerTitle: bookTitle,
+  };
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    naslov: {
-        margin: 20,
-        fontSize: 20,
-        fontFamily: 'lora-bold'
-    },
-    ikonica: {
-        marginHorizontal: 50,
-        marginVertical: 5
-    },
-    img: {
-        width: '100%',
-        height: 350
-    },
-    description: {
-        margin: 15
-    }
+  screen: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  naslov: {
+    margin: 20,
+    fontSize: 20,
+    fontFamily: "lora-bold",
+  },
+  ikonica: {
+    marginHorizontal: 50,
+    marginVertical: 5,
+  },
+  img: {
+    width: "100%",
+    height: 350,
+  },
+  description: {
+    margin: 15,
+  },
 });
 export default BookInfo;

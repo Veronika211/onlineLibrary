@@ -10,10 +10,12 @@ import { Provider } from 'react-redux'
 import ReduxThunk from 'redux-thunk'
 import authReducer from './store/reducers/auth'
 import NavigationContainer from './navigation/NavigationContainer';
+import commentReducer from './store/reducers/comments';
 
 const rootReducer = combineReducers({
   books: booksReducer,
-  auth: authReducer
+  auth: authReducer,
+  comments: commentReducer
 })
 
 //cuvamo stanje globalno ovde 

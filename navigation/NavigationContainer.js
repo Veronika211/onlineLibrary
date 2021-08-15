@@ -6,7 +6,7 @@ import Navigator from './Navigator';
 
 const NavigationContainer = props => {
   const navRef = useRef();
-  const isAuth = useSelector(state => !!state.auth.token);
+  const isAuth = useSelector(state => state.auth.token);
 
   useEffect(() => {
     if (!isAuth) {
