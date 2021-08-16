@@ -75,7 +75,10 @@ const BookInfo = (props) => {
         <Text style={styles.description}>Opis:{selectedBook.description}</Text>
       </View>
       {comments ? 
-      <CommentList data={comments} navigation={props.navigation} /> : <Text>Nema komentara.</Text>}
+      <CommentList data={comments} navigation={props.navigation}
+       genreKey={genreKey}
+       bookKey={bookKey}
+       /> : <Text>Nema komentara.</Text>}
       <TouchableOpacity
         onPress={() => {
           props.navigation.navigate("Comment", {
@@ -85,7 +88,7 @@ const BookInfo = (props) => {
           });
         }}
       >
-        <Ionicons name="chatbox-ellipses-outline" size={50} />
+        <Ionicons name="chatbox-ellipses-outline" size={35} />
         <Text>Dodajte komentar</Text>
       </TouchableOpacity>
     </ScrollView>

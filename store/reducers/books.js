@@ -1,4 +1,4 @@
-import { LOAD_BOOKS, LOAD_GENRES } from "../actions/books";
+import { LOAD_BOOKS, LOAD_GENRES, FILTER_BOOKS } from "../actions/books";
 import { Alert } from "react-native";
 import { LOAD_LIST, ADD_BOOK, REMOVE_BOOK } from "../actions/readingList";
 
@@ -8,6 +8,7 @@ const initialState = {
   //postavljamo prazan niz jer jos nismo nista ubacili u listu citanja
   readingList: [],
   genres: [],
+  filteredBooks: []
 };
 
 const booksReducer = (state = initialState, action) => {
@@ -32,6 +33,7 @@ const booksReducer = (state = initialState, action) => {
     case LOAD_BOOKS:
       return {
         ...state,
+        filteredBooks: action.bookData,
         bookData: action.bookData,
       };
     case LOAD_GENRES:
@@ -39,9 +41,15 @@ const booksReducer = (state = initialState, action) => {
         ...state,
         genres: action.genreData,
       };
+      case FILTER_BOOKS:
+        return {
+          ...state,
+          filteredBooks: action.books
+        }
     default:
       return state;
   }
+ 
 };
 
 export default booksReducer;

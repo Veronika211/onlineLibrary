@@ -63,3 +63,38 @@ export const createComment = (bookId, bookKey, genreKey, text, mark) => {
     });
   };
 };
+
+
+export const updateComment = (bookKey, genreKey, commentId, text, mark) => {
+
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const response = await fetch(
+      `https://library-app-fe6ce-default-rtdb.europe-west1.firebasedatabase.app/zanrovi/${genreKey}/books/${bookKey}/comments/${commentId}.json?auth=${token}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text,
+          mark
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Something went wrong!');
+    }
+    
+    dispatch({
+      type: UPDATE_COMMENT,
+      commentId: commentId,
+      comment: {
+        text,
+        mark
+      }
+    });
+  };
+};
+

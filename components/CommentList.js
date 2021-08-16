@@ -12,6 +12,9 @@ const CommentList = props => {
          user = {itemData.item.userId} 
          id = {itemData.item.id}
          mark = {itemData.item.mark}
+         genreKey={props.genreKey}
+         bookKey={props.bookKey}
+         navigation={props.navigation}
          />
     }
 

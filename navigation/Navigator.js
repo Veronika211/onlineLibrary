@@ -15,6 +15,7 @@ import StartUp from "../screens/StartUp";
 import { useDispatch } from "react-redux";
 import * as authActions from '../store/actions/auth'
 import CommentsEdit from "../screens/CommentsEdit";
+import AllBooks from "../screens/AllBooks";
 
 const defaultSet = {
   headerStyle: {
@@ -114,9 +115,13 @@ const LogInNavigator = createStackNavigator({
   LogIn: LogIn,
 });
 
+const SearchNavigator = createStackNavigator({
+  Search: AllBooks
+})
 const MainNavigator = createDrawerNavigator(
   {
     Homepage: FooterNavigator,
+    SveKnjige: SearchNavigator
   },
   {
     contentOptions: {
@@ -141,6 +146,7 @@ const MainNavigator = createDrawerNavigator(
     }
   }
 );
+
 //ovo nam sluzi za prelaz izmedju login stranice i pocetne
 const SwitchNavigator = createSwitchNavigator({
   StartUp: StartUp,

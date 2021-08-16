@@ -1,5 +1,5 @@
 import { CREATE_COMMENT, DELETE_COMMENT, LOAD_COMMENTS, UPDATE_COMMENT } from "../actions/comments";
-
+import Comment from "../../models/comment"
 const initialState = {
     comments: []
   };
@@ -21,10 +21,18 @@ const initialState = {
           }
       case UPDATE_COMMENT:
         const commentIndex = state.comments.findIndex(
-            comm => comm.id === action.commId
+            comm => comm.id === action.commentId
+          );
+          const updatedComment = new Comment(
+            action.commentId,
+            state.comments[commentIndex].userId,
+            state.comments[commentIndex].bookId,
+            action.comment.text,
+            action.comment.mark,
+            state.comments[commentIndex].date
           );
           const updatedComments = [...state.comments];
-          updatedComments[commentIndex] = action.comment;
+          updatedComments[commentIndex] = updatedComment;
         return {
           ...state,
           comments: updatedComments

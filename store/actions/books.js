@@ -2,6 +2,7 @@ import Book from "../../models/book";
 import Comment from "../../models/comment"
 export const LOAD_BOOKS = 'LOAD_BOOKS';
 export const LOAD_GENRES = 'LOAD_GENRES';
+export const FILTER_BOOKS = 'FILTER_BOOKS';
 
 export const loadBooks = () => {
     return async dispatch => {
@@ -75,4 +76,23 @@ export const loadGenres = () => {
         genreData: loadedGenres
         })
     }
+}
+
+export const filterBooks = (text) =>{
+  return(dispatch,getState) => {
+    const books = getState().books.bookData;
+    const filteredBooks = books.filter((book) =>{
+      const title = book.title.toUpperCase();
+      const searchText = text.toUpperCase();
+      return title.indexOf(searchText) > -1
+    })
+    // const toUpperBooks = books.filter((book) => book.title.toUpperCase())
+    // const textUpper = text.toUpperCase();
+    // const filteredBooks = toUpperBooks.filter((book) => book.title.indexOf(textUpper) > -1)
+   console.log(filteredBooks)
+  dispatch({
+    type: FILTER_BOOKS,
+    books: filteredBooks
+    })
+  }
 }

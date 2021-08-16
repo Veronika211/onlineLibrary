@@ -42,9 +42,9 @@ const Comments = (props) => {
   const genreKey = props.navigation.getParam("genreKey");
   const bookId = props.navigation.getParam("bookId");
   const commentId = props.navigation.getParam("commentId");
-  // const editedProduct = useSelector(state =>
-  //     state.products.userProducts.find(prod => prod.id === prodId)
-  //   );
+  const updatedComment = useSelector(state =>
+      state.comments.comments.find(comment => comment.id === commentId)
+    );
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -52,12 +52,12 @@ const Comments = (props) => {
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      text: "",
-      mark: "",
+      text: updatedComment ? updatedComment.text : "",
+      mark: updatedComment? updatedComment.mark : "",
     },
     inputValidities: {
-      text: false,
-      mark: false,
+      text: updatedComment ? true : false,
+      mark: updatedComment ? true : false,
     },
     formIsValid: false,
   });
@@ -78,20 +78,21 @@ const Comments = (props) => {
     setError(null);
     setIsLoading(true);
     try {
-      //   if (editedProduct) {
-      //     await dispatch(
-      //       productsActions.updateProduct(
-      //         prodId,
-      //         formState.inputValues.title,
-      //         formState.inputValues.description,
-      //         formState.inputValues.imageUrl
-      //       )
-      //     );
-      //   } else {
+        if (updatedComment) {
+          await dispatch(
+            commentActions.updateComment(
+              bookKey,
+              genreKey,
+              commentId,
+              formState.inputValues.text,
+              formState.inputValues.mark, 
+            )
+          );
+        } else {
       await dispatch(
         commentActions.createComment(bookId, bookKey, genreKey, formState.inputValues.text, formState.inputValues.mark)
       );
-      //}
+      }
       props.navigation.goBack();
     } catch (err) {
       setError(err.message);
@@ -136,8 +137,8 @@ const Comments = (props) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue=""
-            initiallyValid="false"
+            initialValue= {updatedComment ? updatedComment.text : ""}
+            initiallyValid={!!updatedComment}
             required
           />
           <Input
@@ -146,7 +147,7 @@ const Comments = (props) => {
             errorText="Ocena mora biti u opsegu 1-5!"
             keyboardType="decimal-pad"
             returnKeyType="next"
-            initialValue=""
+            initialValue={updatedComment ? updatedComment.mark : ""}
             onInputChange={inputChangeHandler}
             required
             min={1}
@@ -155,7 +156,7 @@ const Comments = (props) => {
             <Button
               title="Izmeni"
               onPress={() => {
-                dispatch(commentActions.updateComment());
+                submitHandler()
               }}
             />
           ) : (
