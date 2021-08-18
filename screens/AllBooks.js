@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView,View, Text,TextInput, StyleSheet } from "react-native";
 import BookItem from "../components/BookItem";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,16 +11,22 @@ const AllBooks = (props) => {
   const dispatch = useDispatch();
   const searchHandler = (text) => {
     dispatch(booksActions.filterBooks(text));
+    setValue(text);
   };
- 
+  const [value,setValue] = useState("");
+
   return (
       <View style={styles.container}>
         <TextInput
-        placeholder="Pretrazite..."
+        value={value}
+        placeholder="Pretražite naslove..."
         onChangeText={(value) => searchHandler(value)}
         style={styles.search}
       />
+      {filteredBookData.length > 0 ?
       <BookItem data={filteredBookData} navigation={props.navigation} />
+      : <Text>{"Nema knjiga sa takvim naslovom."}</Text>
+}
       </View>
      
   );

@@ -9,7 +9,7 @@ const CommentItem = (props) => {
   const user = useSelector((state) => state.auth.email);
   const dispatch = useDispatch();
 
-  console.log(props.bookKey + props.genreKey + props.id);
+ 
   const deleteCommentHandler = useCallback(() => {
     dispatch(
       commentsActions.deleteComment(props.bookKey, props.genreKey, props.id)

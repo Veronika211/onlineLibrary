@@ -48,7 +48,7 @@ const Comments = (props) => {
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {

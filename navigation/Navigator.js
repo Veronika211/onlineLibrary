@@ -111,17 +111,27 @@ const FooterNavigator =
         },
       });
       
-const LogInNavigator = createStackNavigator({
-  LogIn: LogIn,
-});
+// const LogInNavigator = createStackNavigator({
+//   LogIn: LogIn,
+// });
 
 const SearchNavigator = createStackNavigator({
   Search: AllBooks
 })
 const MainNavigator = createDrawerNavigator(
   {
-    Homepage: FooterNavigator,
-    SveKnjige: SearchNavigator
+    Homepage: {
+      screen: FooterNavigator,
+      navigationOptions: {
+        title: 'Početna'
+      }
+    },
+    AllBooks: {
+    screen: SearchNavigator,
+    navigationOptions: {
+      title: 'Sve knjige'
+    }
+    }
   },
   {
     contentOptions: {
@@ -150,7 +160,7 @@ const MainNavigator = createDrawerNavigator(
 //ovo nam sluzi za prelaz izmedju login stranice i pocetne
 const SwitchNavigator = createSwitchNavigator({
   StartUp: StartUp,
-  LogIn: LogInNavigator,
+  LogIn: LogIn,
   Library: MainNavigator,
 });
 

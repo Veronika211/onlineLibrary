@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react";
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,11 +9,11 @@ import CommentList from "../components/CommentList";
 
 const BookInfo = (props) => {
   const bookData = useSelector((state) => state.books.bookData);
-  const bookId = props.navigation.getParam("bookId");
-  const dispatch = useDispatch();
-  const genreKey = props.navigation.getParam("genreKey");
   const comments = useSelector((state) => state.comments.comments);
- console.log(comments)
+  const dispatch = useDispatch();
+  const bookId = props.navigation.getParam("bookId");
+  const genreKey = props.navigation.getParam("genreKey");
+  
 
   var selectedBook = bookData.find((book) => book.id === bookId);
   const bookKey = selectedBook.key;
@@ -33,65 +33,71 @@ const BookInfo = (props) => {
     props.navigation.navigate("ReadingList");
   }, [dispatch, bookId]);
 
+  const flatListArray = [];
   return (
-    <ScrollView>
-      <Image source={{ uri: selectedBook.img }} style={styles.img} />
-      <View style={styles.screen}>
-        <Text style={styles.naslov}>{selectedBook.title}</Text>
-        <Text style={styles.autor}>{selectedBook.author}</Text>
-        <Text style={styles.cena}>{selectedBook.price} din.</Text>
-        {inList && (
-          <TouchableOpacity
-            onPress={() => {
-              deleteFromReadingList();
-            }}
-          >
-            <Ionicons
-              name="trash-outline"
-              size={30}
-              color="black"
-              style={styles.ikonica}
-            />
-            <Text>Obrišite iz liste čitanja</Text>
-          </TouchableOpacity>
-        )}
-        {!inList && (
-          <TouchableOpacity
-            onPress={() => {
-              addToReadingList();
-            }}
-          >
-            <Ionicons
-              name="add-circle-outline"
-              size={30}
-              color="black"
-              style={styles.ikonica}
-            />
-            <Text>Dodajte u listu čitanja</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      <View>
-        <Text style={styles.description}>Opis:{selectedBook.description}</Text>
-      </View>
-      {comments ? 
-      <CommentList data={comments} navigation={props.navigation}
-       genreKey={genreKey}
-       bookKey={bookKey}
-       /> : <Text>Nema komentara.</Text>}
-      <TouchableOpacity
-        onPress={() => {
-          props.navigation.navigate("Comment", {
-            bookId: bookId,
-            bookKey: bookKey,
-            genreKey: genreKey,
-          });
-        }}
-      >
-        <Ionicons name="chatbox-ellipses-outline" size={35} />
-        <Text>Dodajte komentar</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <FlatList data ={flatListArray}
+    ListFooterComponent= {<View>{comments ? 
+        <CommentList data={comments} navigation={props.navigation}
+         genreKey={genreKey}
+         bookKey={bookKey}
+         /> : <Text>Nema komentara.</Text>}
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate("Comment", {
+              bookId: bookId,
+              bookKey: bookKey,
+              genreKey: genreKey,
+            });
+          }}
+        >
+          <Ionicons name="chatbox-ellipses-outline" size={35} />
+          <Text>Dodajte komentar</Text>
+        </TouchableOpacity>
+        </View>
+    }
+    ListHeaderComponent={ <View>
+
+        <Image source={{ uri: selectedBook.img }} style={styles.img} />
+        <View style={styles.screen}>
+          <Text style={styles.naslov}>{selectedBook.title}</Text>
+          <Text style={styles.autor}>{selectedBook.author}</Text>
+          <Text style={styles.cena}>{selectedBook.price} din.</Text>
+          {inList && (
+            <TouchableOpacity
+              onPress={() => {
+                deleteFromReadingList();
+              }}
+            >
+              <Ionicons
+                name="trash-outline"
+                size={30}
+                color="black"
+                style={styles.ikonica}
+              />
+              <Text>Obrišite iz liste čitanja</Text>
+            </TouchableOpacity>
+          )}
+          {!inList && (
+            <TouchableOpacity
+              onPress={() => {
+                addToReadingList();
+              }}
+            >
+              <Ionicons
+                name="add-circle-outline"
+                size={30}
+                color="black"
+                style={styles.ikonica}
+              />
+              <Text>Dodajte u listu čitanja</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View>
+          <Text style={styles.description}>Opis:{selectedBook.description}</Text>
+        </View>
+        </View>}
+    />
   );
 };
 
@@ -119,7 +125,7 @@ const styles = StyleSheet.create({
   },
   img: {
     width: "100%",
-    height: 350,
+    height: 250,
   },
   description: {
     margin: 15,

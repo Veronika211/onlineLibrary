@@ -11,7 +11,7 @@ import * as readingListActions from '../store/actions/readingList'
 const Homepage = props => {
     const genres = useSelector(state => state.books.genres);
     const dispatch = useDispatch();
-    
+    console.log("ponovo ja")
      useEffect(()=>{
         dispatch(bookActions.loadGenres())
         dispatch(readingListActions.fetchList());  
@@ -19,8 +19,10 @@ const Homepage = props => {
      },[dispatch])
    
     const renderListItem = itemData => {
+        const bookNum = itemData.item.books.length
         return (
-            <GenreItem title={itemData.item.title} onSelect={() => {
+            <GenreItem title={itemData.item.title}  bookNum= {bookNum} onSelect={() => {
+                
                 props.navigation.navigate({
                     routeName: 'Books',
                     //params su dodatni parametri i genreId nam omogucava da kada kliknemo na odredjeni zanr
@@ -28,7 +30,8 @@ const Homepage = props => {
                     params: {
                         genreId: itemData.item.id,
                         genreTitle: itemData.item.title,
-                        genreKey: itemData.item.key
+                        genreKey: itemData.item.key,
+                        bookNum: bookNum
                     }
                 })
             }} />

@@ -112,19 +112,19 @@ const LogIn = (props) => {
           required
           email
           autoCapitalize="none"
-          errorText="Please enter a valid email address."
+          errorText="Molimo Vas unesite ispravnu e-mail adresu."
           onInputChange={inputChangeHandler}
           initialValue=""
         />
         <Input
           id="password"
-          label="Password"
+          label="Šifra"
           keyboardType="default"
           secureTextEntry
           required
           minLength={5}
           autoCapitalize="none"
-          errorText="Please enter a valid password."
+          errorText="Šifra mora sadržati bar 5 karaktera."
           onInputChange={inputChangeHandler}
           initialValue=""
         />
@@ -133,14 +133,14 @@ const LogIn = (props) => {
             <ActivityIndicator size="small" />
           ) : (
             <Button
-              title={isSignup ? "Sign Up" : "Login"}
+              title={isSignup ? "Registrujte se" : "Prijavite se"}
               onPress={authHandler}
             />
           )}
         </View>
         <View style={styles.buttonContainer}>
           <Button
-            title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+            title={`${isSignup ? "Prijavite se" : "Registrujte se"}`}
             onPress={() => {
               setIsSignup((prevState) => !prevState);
             }}
@@ -154,6 +154,7 @@ const LogIn = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    margin: 50
   },
   gradient: {
     flex: 1,

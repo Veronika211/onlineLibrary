@@ -5,7 +5,6 @@ import CommentItem from './CommentItem'
 const CommentList = props => {
 
     const renderListItem = itemData =>{
-        console.log(itemData.item.text)
         return <CommentItem
          date={itemData.item.date}
          text = {itemData.item.text}

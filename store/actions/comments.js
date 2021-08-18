@@ -11,7 +11,7 @@ export const loadComments = (bookId) => {
     const selectedBook = books.find(book => book.id == bookId);
     
     const comments = selectedBook.comments;
-    console.log(comments)
+  
     dispatch({ type: LOAD_COMMENTS, comments: comments});
   }
   };
@@ -37,7 +37,7 @@ export const createComment = (bookId, bookKey, genreKey, text, mark) => {
   return async (dispatch, getState) => {
     const mail = getState().auth.email;
     const token = getState().auth.token;
-    const date = new Date().toString();
+    const date = new Date().toLocaleDateString()
     const response = await fetch(
       `https://library-app-fe6ce-default-rtdb.europe-west1.firebasedatabase.app/zanrovi/${genreKey}/books/${bookKey}/comments.json?auth=${token}`,
       {

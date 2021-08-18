@@ -15,7 +15,7 @@ const StartUp = (props) => {
         return;
       }
       const transformedData = JSON.parse(userData);
-      const { token, userId, expiryDate } = transformedData;
+      const { token, userId,email, expiryDate } = transformedData;
       const expirationDate = new Date(expiryDate);
 
       if (expirationDate <= new Date() || !token || !userId) {
@@ -25,7 +25,7 @@ const StartUp = (props) => {
 
       const expirationTime = expirationDate.getTime() - new Date().getTime();
       props.navigation.navigate('Library');
-      dispatch(authActions.authenticate(userId, token, expirationTime));
+      dispatch(authActions.authenticate(userId, token,email, expirationTime));
     };
 
     tryLogin();
