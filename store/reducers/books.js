@@ -1,4 +1,4 @@
-import { LOAD_BOOKS, LOAD_GENRES, FILTER_BOOKS } from "../actions/books";
+import { LOAD_BOOKS, LOAD_GENRES, FILTER_BOOKS, RELOAD_FILTER } from "../actions/books";
 import { Alert } from "react-native";
 import { LOAD_LIST, ADD_BOOK, REMOVE_BOOK } from "../actions/readingList";
 
@@ -46,6 +46,11 @@ const booksReducer = (state = initialState, action) => {
           ...state,
           filteredBooks: action.books
         }
+        case RELOAD_FILTER:
+          return{
+            ...state,
+            filteredBooks: state.bookData
+          }
     default:
       return state;
   }

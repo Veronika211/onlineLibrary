@@ -1,11 +1,20 @@
 import { useEffect, useCallback } from "react";
 import React from "react";
-import { View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  Image,
+} from "react-native";
+import { Ionicons, MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import * as readingListActions from "../store/actions/readingList";
 import CommentList from "../components/CommentList";
+import CommentItem from "../components/CommentItem";
 
 const BookInfo = (props) => {
   const bookData = useSelector((state) => state.books.bookData);
@@ -13,7 +22,6 @@ const BookInfo = (props) => {
   const dispatch = useDispatch();
   const bookId = props.navigation.getParam("bookId");
   const genreKey = props.navigation.getParam("genreKey");
-  
 
   var selectedBook = bookData.find((book) => book.id === bookId);
   const bookKey = selectedBook.key;
@@ -33,71 +41,80 @@ const BookInfo = (props) => {
     props.navigation.navigate("ReadingList");
   }, [dispatch, bookId]);
 
-  const flatListArray = [];
   return (
-    <FlatList data ={flatListArray}
-    ListFooterComponent= {<View>{comments ? 
-        <CommentList data={comments} navigation={props.navigation}
-         genreKey={genreKey}
-         bookKey={bookKey}
-         /> : <Text>Nema komentara.</Text>}
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate("Comment", {
-              bookId: bookId,
-              bookKey: bookKey,
-              genreKey: genreKey,
-            });
-          }}
-        >
-          <Ionicons name="chatbox-ellipses-outline" size={35} />
-          <Text>Dodajte komentar</Text>
-        </TouchableOpacity>
-        </View>
-    }
-    ListHeaderComponent={ <View>
+    <ScrollView>
+      <Image source={{ uri: selectedBook.img }} style={styles.img} />
+      <View style={styles.titleCont}>
+      <Text style={styles.title}>{selectedBook.title}</Text>
+      <Text style={styles.author}>{selectedBook.author}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.price}>{selectedBook.price} RSD</Text>
+        <View style={styles.rowChild}>
+        {inList && (
+          <TouchableOpacity
+          style={styles.icon}
+            onPress={() => {
+              deleteFromReadingList();
+            }}
+          >
+            <Ionicons
+              name="trash-outline"
+              size={30}
+              color="black"
+             
+            />
+            {/* <Text>Obrišite iz liste čitanja</Text> */}
+          </TouchableOpacity>
+        )}
 
-        <Image source={{ uri: selectedBook.img }} style={styles.img} />
-        <View style={styles.screen}>
-          <Text style={styles.naslov}>{selectedBook.title}</Text>
-          <Text style={styles.autor}>{selectedBook.author}</Text>
-          <Text style={styles.cena}>{selectedBook.price} din.</Text>
-          {inList && (
-            <TouchableOpacity
-              onPress={() => {
-                deleteFromReadingList();
-              }}
-            >
-              <Ionicons
-                name="trash-outline"
-                size={30}
-                color="black"
-                style={styles.ikonica}
-              />
-              <Text>Obrišite iz liste čitanja</Text>
-            </TouchableOpacity>
-          )}
-          {!inList && (
-            <TouchableOpacity
-              onPress={() => {
-                addToReadingList();
-              }}
-            >
-              <Ionicons
-                name="add-circle-outline"
-                size={30}
-                color="black"
-                style={styles.ikonica}
-              />
-              <Text>Dodajte u listu čitanja</Text>
-            </TouchableOpacity>
-          )}
+        {!inList && (
+          <TouchableOpacity
+          style={styles.icon}
+            onPress={() => {
+              addToReadingList();
+            }}
+          >
+            <MaterialIcons name="post-add" size={30} color="black" />
+            {/* <Text>Dodajte u listu čitanja</Text> */}
+          </TouchableOpacity>
+        )}
         </View>
-        <View>
-          <Text style={styles.description}>Opis:{selectedBook.description}</Text>
-        </View>
-        </View>}
-    />
+      </View>
+      <View>
+        <Text style={styles.titleDes}>Opis knjige</Text>
+        <Text style={styles.description}>{selectedBook.description}</Text>
+      </View>
+
+      {comments && (
+        <CommentList
+          data={comments}
+          navigation={props.navigation}
+          genreKey={genreKey}
+          bookKey={bookKey}
+        />
+      )}
+      <View style={styles.view}>
+      <TouchableOpacity
+        style={styles.addBar}
+        onPress={() => {
+          props.navigation.navigate("Comment", {
+            bookId: bookId,
+            bookKey: bookKey,
+            genreKey: genreKey,
+          });
+        }}
+      >
+        <MaterialCommunityIcons
+          name="comment-text-outline"
+          size={23}
+          color="grey"
+        />
+
+        <Text style={styles.addTxt}>Ostavite komentar</Text>
+      </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -109,26 +126,76 @@ BookInfo.navigationOptions = (navigationData) => {
 };
 
 const styles = StyleSheet.create({
-  screen: {
+  titleCont: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom:20
   },
-  naslov: {
-    margin: 20,
+  title: {
+    margin: 17,
     fontSize: 20,
     fontFamily: "lora-bold",
   },
-  ikonica: {
+  author: {
     marginHorizontal: 50,
-    marginVertical: 5,
+    fontSize:17
   },
   img: {
     width: "100%",
     height: 250,
   },
+  price:{
+    fontSize: 16,
+    marginTop:9
+  },
   description: {
-    margin: 15,
+    marginHorizontal: 15,
+    marginVertical: 17,
+  },
+  view:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  addBar: {
+    flexDirection: "row",
+    marginVertical: 10,
+    borderWidth: 0.9,
+    borderRadius: 30,
+    borderColor: "lightgrey",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 12,
+    height: 48,
+    width: 320,
+  },
+  addTxt: {
+    color: "grey",
+    marginTop: 2,
+    marginLeft: 13,
+  },
+  icon:{
+    borderWidth: 2,
+    borderRadius: 30,
+    borderColor: "black",
+    padding:6,
+    backgroundColor: 'white'
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginHorizontal:20,
+    marginBottom:20
+  },
+  rowChild:{
+    flexDirection:'row'
+  },
+  titleDes: {
+    marginHorizontal: 15,
+    fontSize: 15,
+    fontWeight: "500",
   },
 });
 export default BookInfo;

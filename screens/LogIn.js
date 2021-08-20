@@ -7,6 +7,7 @@ import {
   Button,
   ActivityIndicator,
   Alert,
+  Image,
 } from "react-native";
 
 import { useDispatch } from "react-redux";
@@ -101,10 +102,24 @@ const LogIn = (props) => {
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      keyboardVerticalOffset={50}
+      keyboardVerticalOffset={1}
       style={styles.screen}
     >
-      <ScrollView>
+      
+      <View style={styles.imgView}>
+      <Image
+        source={require("../assets/images/bookmark.png")}
+        style={styles.img}
+      />
+      </View>
+      {isLoading ? <ActivityIndicator size='small' color="black"/> :
+      <ScrollView
+        style={styles.mainContainer}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Input
           id="email"
           label="E-Mail"
@@ -129,46 +144,61 @@ const LogIn = (props) => {
           initialValue=""
         />
         <View style={styles.buttonContainer}>
-          {isLoading ? (
-            <ActivityIndicator size="small" />
-          ) : (
+         
             <Button
               title={isSignup ? "Registrujte se" : "Prijavite se"}
               onPress={authHandler}
+              color="white"
             />
-          )}
+        
         </View>
-        <View style={styles.buttonContainer}>
+        <View>
           <Button
             title={`${isSignup ? "Prijavite se" : "Registrujte se"}`}
+            color="black"
             onPress={() => {
               setIsSignup((prevState) => !prevState);
             }}
           />
         </View>
       </ScrollView>
+}
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    margin: 50
+    flex: 1
   },
-  gradient: {
+  mainContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  authContainer: {
-    width: "80%",
-    maxWidth: 400,
-    maxHeight: 400,
-    padding: 20,
+    margin: 50,
+    marginTop:5
   },
   buttonContainer: {
     marginTop: 10,
+    backgroundColor: "#70012B",
+    padding: 12,
+    margin: 20,
+    marginTop: 30,
+    borderRadius: 40,
+    width: 170,
+  },
+  imgView:{
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop:100,
+    marginBottom:30,
+    padding:10
+  },
+  img: {
+    alignSelf:'center',
+    height: 150,
+    width: 130
+  },
+  textButton: {
+    color: "#70012B",
   },
 });
 

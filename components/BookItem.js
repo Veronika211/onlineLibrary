@@ -23,6 +23,7 @@ const BookItem = props => {
          id = {itemData.item.id}
          onSelect ={() => {
              dispatch(commentsActions.loadComments(itemData.item.id));
+            if(props.resetInput) props.resetInput();
              props.navigation.navigate({routeName:'Info', params:{
                  bookId: itemData.item.id,
                  inList: props.inList,

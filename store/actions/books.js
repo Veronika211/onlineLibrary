@@ -3,6 +3,7 @@ import Comment from "../../models/comment";
 export const LOAD_BOOKS = "LOAD_BOOKS";
 export const LOAD_GENRES = "LOAD_GENRES";
 export const FILTER_BOOKS = "FILTER_BOOKS";
+export const RELOAD_FILTER="RELOAD_FILTER";
 
 export const loadBooks = () => {
   return async (dispatch) => {
@@ -101,3 +102,9 @@ export const filterBooks = (text) => {
     });
   };
 };
+
+export const reload = () =>{
+  return{
+    type:RELOAD_FILTER
+  }
+}

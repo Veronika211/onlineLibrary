@@ -1,7 +1,7 @@
 import React from "react";
-import { Platform, View, SafeAreaView, Button, Text } from "react-native";
+import { Platform, View, SafeAreaView, Button, Text,Image } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createDrawerNavigator,DrawerItems } from "react-navigation-drawer";
+import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import Homepage from "../screens/Homepage";
@@ -13,7 +13,7 @@ import { createMaterialBottomTabNavigator } from "react-navigation-material-bott
 import LogIn from "../screens/LogIn";
 import StartUp from "../screens/StartUp";
 import { useDispatch } from "react-redux";
-import * as authActions from '../store/actions/auth'
+import * as authActions from "../store/actions/auth";
 import CommentsEdit from "../screens/CommentsEdit";
 import AllBooks from "../screens/AllBooks";
 
@@ -28,6 +28,10 @@ const defaultSet = {
     fontFamily: "arimo",
   },
   headerTintColor: Platform.OS === "android" ? "white" : "#70012B",
+  headerRight: ()=> <Image
+  source={require("../assets/images/logo.png")}
+  style={{height:25,width:25,marginRight:17,alignSelf:'center'}}
+/>
 };
 const Navigator = createStackNavigator(
   {
@@ -35,7 +39,7 @@ const Navigator = createStackNavigator(
     Homepage: Homepage,
     Books: BookList,
     Info: BookInfo,
-    Comment: CommentsEdit
+    Comment: CommentsEdit,
     //drugi argument nam omogucava da definisemo nacin na koji zelimo da nam header izgleda na svim ekranima
   },
   {
@@ -110,28 +114,29 @@ const FooterNavigator =
           activeTintColor: "#70012B",
         },
       });
-      
-// const LogInNavigator = createStackNavigator({
-//   LogIn: LogIn,
-// });
 
-const SearchNavigator = createStackNavigator({
-  Search: AllBooks
-})
+const SearchNavigator = createStackNavigator(
+  {
+    Search: AllBooks,
+  },
+  {
+    defaultNavigationOptions: defaultSet,
+  }
+);
 const MainNavigator = createDrawerNavigator(
   {
     Homepage: {
       screen: FooterNavigator,
       navigationOptions: {
-        title: 'Početna'
-      }
+        title: "Početna",
+      },
     },
     AllBooks: {
-    screen: SearchNavigator,
-    navigationOptions: {
-      title: 'Sve knjige'
-    }
-    }
+      screen: SearchNavigator,
+      navigationOptions: {
+        title: "Sve knjige",
+      },
+    },
   },
   {
     contentOptions: {
@@ -140,20 +145,24 @@ const MainNavigator = createDrawerNavigator(
         fontFamily: "arimo-bold",
       },
     },
-    contentComponent: props => {
-     const dispatch = useDispatch();
-     return(
-      <View style={{flex: 1}}>
-        <SafeAreaView forceInset={{top:'always',horizontal:'never'}}>
-      <DrawerItems {...props}/>
-      <Button title='Odjavi se' onPress={() => {
-        dispatch(authActions.logout())
-        props.navigation.navigate('LogIn')
-      }}/>
-        </SafeAreaView>
-      </View>
-     )
-    }
+    contentComponent: (props) => {
+      const dispatch = useDispatch();
+      return (
+        <View style={{ flex: 1 }}>
+          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            <DrawerItems {...props} />
+            <Button
+              title="Odjavi se"
+              color="black"
+              onPress={() => {
+                dispatch(authActions.logout());
+                props.navigation.navigate("LogIn");
+              }}
+            />
+          </SafeAreaView>
+        </View>
+      );
+    },
   }
 );
 
@@ -163,6 +172,5 @@ const SwitchNavigator = createSwitchNavigator({
   LogIn: LogIn,
   Library: MainNavigator,
 });
-
 
 export default createAppContainer(SwitchNavigator);

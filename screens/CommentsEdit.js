@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useCallback, useReducer  } from "react";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
 import {
   View,
   Text,
@@ -6,7 +6,8 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import Input from "../components/UI/Input";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,9 +43,10 @@ const Comments = (props) => {
   const genreKey = props.navigation.getParam("genreKey");
   const bookId = props.navigation.getParam("bookId");
   const commentId = props.navigation.getParam("commentId");
-  const updatedComment = useSelector(state =>
-      state.comments.comments.find(comment => comment.id === commentId)
-    );
+
+  const updatedComment = useSelector((state) =>
+    state.comments.comments.find((comment) => comment.id === commentId)
+  );
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +55,7 @@ const Comments = (props) => {
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       text: updatedComment ? updatedComment.text : "",
-      mark: updatedComment? updatedComment.mark : "",
+      mark: updatedComment ? updatedComment.mark : "",
     },
     inputValidities: {
       text: updatedComment ? true : false,
@@ -64,34 +66,42 @@ const Comments = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("An error occurred!", error, [{ text: "Okay" }]);
+      Alert.alert("Greška!", error, [{ text: "Ok" }]);
     }
   }, [error]);
 
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
-      Alert.alert("Wrong input!", "Please check the errors in the form.", [
-        { text: "Okay" },
+      Alert.alert("Greška!", "Proverite da li ste dobro popunili sva polja.", [
+        { text: "Ok" },
       ]);
       return;
     }
     setError(null);
     setIsLoading(true);
     try {
-        if (updatedComment) {
-          await dispatch(
-            commentActions.updateComment(
-              bookKey,
-              genreKey,
-              commentId,
-              formState.inputValues.text,
-              formState.inputValues.mark, 
-            )
-          );
-        } else {
-      await dispatch(
-        commentActions.createComment(bookId, bookKey, genreKey, formState.inputValues.text, formState.inputValues.mark)
-      );
+      if (updatedComment) {
+        await dispatch(
+          commentActions.updateComment(
+            bookKey,
+            genreKey,
+            commentId,
+            formState.inputValues.text,
+            formState.inputValues.mark
+          )
+        );
+        Alert.alert("", "Uspešno ste izmenili komentar!", [{ text: "Ok" }]);
+      } else {
+        await dispatch(
+          commentActions.createComment(
+            bookId,
+            bookKey,
+            genreKey,
+            formState.inputValues.text,
+            formState.inputValues.mark
+          )
+        );
+        Alert.alert("", "Uspešno ste uneli komentar!", [{ text: "Ok" }]);
       }
       props.navigation.goBack();
     } catch (err) {
@@ -127,7 +137,7 @@ const Comments = (props) => {
       keyboardVerticalOffset={100}
     >
       <ScrollView>
-        <View >
+        <View style={styles.inputContainer}>
           <Input
             id="text"
             label="Unesite komentar"
@@ -137,14 +147,18 @@ const Comments = (props) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue= {updatedComment ? updatedComment.text : ""}
+            initialValue={updatedComment ? updatedComment.text : ""}
             initiallyValid={!!updatedComment}
             required
+            multiline={true}
+            numberOfLines={3}
           />
           <Input
             id="mark"
             label="Unesite ocenu:"
             errorText="Ocena mora biti u opsegu 1-5!"
+            min={1}
+            max={5}
             keyboardType="decimal-pad"
             returnKeyType="next"
             initialValue={updatedComment ? updatedComment.mark : ""}
@@ -153,19 +167,25 @@ const Comments = (props) => {
             min={1}
           />
           {commentId ? (
+            <View style={styles.button}>
             <Button
               title="Izmeni"
+              color="white"
               onPress={() => {
-                submitHandler()
+                submitHandler();
               }}
             />
+            </View>
           ) : (
-            <Button
-              title="Dodaj"
-              onPress={() => {
-                submitHandler()
-              }}
-            />
+            <View style={styles.button}>
+              <Button
+                title="Dodaj"
+                onPress={() => {
+                  submitHandler();
+                }}
+                color="white"
+              />
+            </View>
           )}
         </View>
       </ScrollView>
@@ -180,4 +200,22 @@ Comments.navigationOptions = (navData) => {
   };
 };
 
+const styles = StyleSheet.create({
+  inputContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 20,
+  },
+  button: {
+    marginTop: 10,
+    backgroundColor: "#70012B",
+    padding: 12,
+    margin: 20,
+    marginTop: 30,
+    borderRadius: 40,
+    height: 65,
+    width: 130,
+  },
+});
 export default Comments;

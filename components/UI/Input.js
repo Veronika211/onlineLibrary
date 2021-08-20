@@ -89,11 +89,12 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: "arimo-bold",
     marginVertical: 8,
+    marginTop:20
   },
   input: {
     paddingHorizontal: 2,
     paddingVertical: 5,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#70012B",
     borderBottomWidth: 1,
   },
   errorContainer: {

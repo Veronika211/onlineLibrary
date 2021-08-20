@@ -22,9 +22,9 @@ const GenreItem = (props) => {
           <Text style={styles.title} numberOfLines={2}>
             {props.title}
           </Text>
-          <Text>
-            Broj naslova:
-            {props.bookNum}
+          <Text style={styles.booksNum}>
+            Broj naslova: 
+            {" "+props.bookNum}
           </Text>
         </View>
       </TouchableComponent>
@@ -58,8 +58,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontFamily: "lora",
+    fontFamily: "lora-bold",
+    marginBottom:10
   },
+  booksNum:{
+
+  }
 });
 
 export default GenreItem;
