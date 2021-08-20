@@ -3,7 +3,7 @@ export const ADD_BOOK = "ADD_BOOK";
 export const LOAD_LIST = "LOAD_LIST";
 export const REMOVE_BOOK = "REMOVE_BOOK";
 
-export const fetchList = () => {
+export const loadList = () => {
   return async (dispatch, getState) => {
     const userId = getState().auth.userId;
     try {

@@ -24,6 +24,19 @@ const BookInfo = (props) => {
   const genreKey = props.navigation.getParam("genreKey");
 
   var selectedBook = bookData.find((book) => book.id === bookId);
+ 
+  const averageMark = () => {
+    var sum = 0;
+    for(let i=0;i<comments.length;i++){
+      sum+=parseInt(comments[i].mark)
+      
+    }
+     if(sum!=0){
+     return (sum/comments.length).toFixed(2)
+     }
+     return 0;
+  }
+
   const bookKey = selectedBook.key;
 
   useEffect(() => {
@@ -49,7 +62,10 @@ const BookInfo = (props) => {
       <Text style={styles.author}>{selectedBook.author}</Text>
       </View>
       <View style={styles.row}>
+        <View style={styles.column}>
         <Text style={styles.price}>{selectedBook.price} RSD</Text>
+        <Text style={styles.avgMark}>Prosecna ocena: {averageMark()}</Text>
+        </View>
         <View style={styles.rowChild}>
         {inList && (
           <TouchableOpacity
@@ -64,10 +80,9 @@ const BookInfo = (props) => {
               color="black"
              
             />
-            {/* <Text>Obrišite iz liste čitanja</Text> */}
+         
           </TouchableOpacity>
         )}
-
         {!inList && (
           <TouchableOpacity
           style={styles.icon}
@@ -76,11 +91,13 @@ const BookInfo = (props) => {
             }}
           >
             <MaterialIcons name="post-add" size={30} color="black" />
-            {/* <Text>Dodajte u listu čitanja</Text> */}
+           
           </TouchableOpacity>
         )}
         </View>
+       
       </View>
+     
       <View>
         <Text style={styles.titleDes}>Opis knjige</Text>
         <Text style={styles.description}>{selectedBook.description}</Text>
@@ -148,6 +165,10 @@ const styles = StyleSheet.create({
   price:{
     fontSize: 16,
     marginTop:9
+  },
+  avgMark:{
+    fontSize:14,
+    marginVertical:5
   },
   description: {
     marginHorizontal: 15,
