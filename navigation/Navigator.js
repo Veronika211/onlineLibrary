@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, View, SafeAreaView, Button, Text,Image } from "react-native";
+import { Platform, View, SafeAreaView, Button, Text,Image,Alert } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
@@ -155,8 +155,25 @@ const MainNavigator = createDrawerNavigator(
               title="Odjavi se"
               color="black"
               onPress={() => {
-                dispatch(authActions.logout());
-                props.navigation.navigate("LogIn");
+                Alert.alert(
+                  "Da li ste sigurni da želite da se odjavite?",
+                  "",
+                  [
+                    {
+                      text: "Da",
+                      onPress: () => {
+                        dispatch(authActions.logout());
+                        props.navigation.navigate("LogIn");
+                      },
+                      
+                    },
+                    { text: "Ne", onPress: () => {
+                    return;
+                    },
+                    style: "cancel" }
+                  ]
+                );
+               
               }}
             />
           </SafeAreaView>

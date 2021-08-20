@@ -11,7 +11,7 @@ import * as readingListActions from '../store/actions/readingList'
 const Homepage = props => {
     const genres = useSelector(state => state.books.genres);
     const dispatch = useDispatch();
-    console.log("reload")
+
      useEffect(()=>{
         dispatch(bookActions.loadGenres())
         dispatch(bookActions.loadBooks()); 
