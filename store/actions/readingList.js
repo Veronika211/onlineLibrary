@@ -12,7 +12,7 @@ export const loadList = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Something went wrong!");
+        throw new Error("Došlo je do greške!");
       }
 
       const resData = await response.json();
@@ -67,11 +67,11 @@ export const addBook = (bookId) => {
         );
 
         if (!response.ok) {
-          throw new Error("Something went wrong!");
+          throw new Error("Došlo je do greške!");
         }
 
         const resData = await response.json();
-        Alert.alert("Uspesno ste dodali knjigu u listu citanja");
+        Alert.alert("Uspešno ste dodali knjigu u listu čitanja");
         dispatch({
           type: ADD_BOOK,
           book: book,
@@ -94,11 +94,11 @@ export const addBook = (bookId) => {
       );
 
       if (!response.ok) {
-        throw new Error("Something went wrong!");
+        throw new Error("Došlo je do greška!");
       }
 
       const resData = await response.json();
-      Alert.alert("Uspesno ste dodali knjigu u listu citanja");
+      Alert.alert("Uspešno ste dodali knjigu u listu čitanja");
       dispatch({
         type: ADD_BOOK,
         book: book,
@@ -122,9 +122,9 @@ export const deleteBook = (bookId) => {
     );
 
     if (!response.ok) {
-      throw new Error("Something went wrong!");
+      throw new Error("Došlo je do greške!");
     }
-    Alert.alert("Uspesno ste obrisali knjigu iz liste citanja!");
+    Alert.alert("Uspešno ste obrisali knjigu iz liste čitanja!");
     dispatch({ type: REMOVE_BOOK, bookId: bookId });
   };
 };

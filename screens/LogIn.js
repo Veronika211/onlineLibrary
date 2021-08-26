@@ -7,7 +7,7 @@ import {
   Button,
   ActivityIndicator,
   Alert,
-  Image,
+  Image
 } from "react-native";
 
 import { useDispatch } from "react-redux";
@@ -148,14 +148,14 @@ const LogIn = (props) => {
             <Button
               title={isSignup ? "Registrujte se" : "Prijavite se"}
               onPress={authHandler}
-              color="white"
+              color= "white"
             />
         
         </View>
         <View>
           <Button
             title={`${isSignup ? "Prijavite se" : "Registrujte se"}`}
-            color="black"
+            color = "black"
             onPress={() => {
               setIsSignup((prevState) => !prevState);
             }}

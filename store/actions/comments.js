@@ -27,7 +27,7 @@ export const deleteComment = (bookKey, genreKey, commentId) => {
     );
 
     if (!response.ok) {
-      throw new Error("Something went wrong!");
+      throw new Error("Došlo je do greške!");
     }
     dispatch({ type: DELETE_COMMENT, commId: commentId });
   };
@@ -84,7 +84,7 @@ export const updateComment = (bookKey, genreKey, commentId, text, mark) => {
     );
 
     if (!response.ok) {
-      throw new Error('Something went wrong!');
+      throw new Error('Došlo je do greške!');
     }
     
     dispatch({

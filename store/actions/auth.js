@@ -76,7 +76,6 @@ export const login = (email, password) => {
         }),
       }
     );
-
     if (!response.ok) {
       const errorResData = await response.json();
       const errorId = errorResData.error.message;
@@ -90,7 +89,7 @@ export const login = (email, password) => {
     }
 
     const resData = await response.json();
-
+  
     dispatch(
       authenticate(
         resData.localId,

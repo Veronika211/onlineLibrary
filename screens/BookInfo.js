@@ -14,7 +14,7 @@ import { TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import * as readingListActions from "../store/actions/readingList";
 import CommentList from "../components/CommentList";
-import CommentItem from "../components/CommentItem";
+
 
 const BookInfo = (props) => {
   const bookData = useSelector((state) => state.books.bookData);

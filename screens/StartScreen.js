@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator} from "react-native";
 import * as authActions from "../store/actions/auth";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -38,6 +38,6 @@ const StartUp = (props) => {
   );
 };
 
-const styles = StyleSheet.create({});
+
 
 export default StartUp;

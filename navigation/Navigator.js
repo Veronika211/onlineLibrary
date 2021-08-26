@@ -11,7 +11,7 @@ import ReadingList from "../screens/ReadingList";
 import { Ionicons, Entypo, FontAwesome5 } from "@expo/vector-icons";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import LogIn from "../screens/LogIn";
-import StartUp from "../screens/StartUp";
+import StartScreen from "../screens/StartScreen";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
 import CommentsEdit from "../screens/CommentsEdit";
@@ -185,7 +185,7 @@ const MainNavigator = createDrawerNavigator(
 
 //ovo nam sluzi za prelaz izmedju login stranice i pocetne
 const SwitchNavigator = createSwitchNavigator({
-  StartUp: StartUp,
+  StartScreen: StartScreen,
   LogIn: LogIn,
   Library: MainNavigator,
 });
