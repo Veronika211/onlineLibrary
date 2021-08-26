@@ -64,15 +64,18 @@ const Input = (props) => {
   };
 
   return (
-    <View style={styles.formControl}>
+    <View style={{ width: "100%" }}>
       <Text style={styles.label}>{props.label}</Text>
-      <TextInput
-        {...props}
-        style={styles.input}
-        value={inputState.value}
-        onChangeText={textChangeHandler}
-        onBlur={lostFocusHandler}
-      />
+      <View style={styles.formControl}>
+        <TextInput
+          {...props}
+          style={styles.input}
+          value={inputState.value}
+          onChangeText={textChangeHandler}
+          onBlur={lostFocusHandler}
+        />
+        <View style={styles.icon}>{props.icon && props.icon}</View>
+      </View>
       {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{props.errorText}</Text>
@@ -85,17 +88,22 @@ const Input = (props) => {
 const styles = StyleSheet.create({
   formControl: {
     width: "100%",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent:"space-between",
+    alignItems:'flex-start',
+    borderBottomColor: "#70012B",
+    borderBottomWidth: 1,
   },
   label: {
     fontFamily: "arimo-bold",
     marginVertical: 8,
-    marginTop:20
+    marginTop: 20,
   },
   input: {
     paddingHorizontal: 2,
     paddingVertical: 5,
-    borderBottomColor: "#70012B",
-    borderBottomWidth: 1,
+    width:'60%'
   },
   errorContainer: {
     marginVertical: 5,
@@ -104,6 +112,9 @@ const styles = StyleSheet.create({
     fontFamily: "arimo",
     color: "red",
     fontSize: 13,
+  },
+  icon: {
+    
   },
 });
 
