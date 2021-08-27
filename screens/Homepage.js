@@ -15,7 +15,8 @@ const Homepage = props => {
      useEffect(()=>{
         dispatch(bookActions.loadGenres())
         dispatch(bookActions.loadBooks()); 
-        dispatch(readingListActions.loadList());    
+        dispatch(readingListActions.loadList());   
+        dispatch(readingListActions.loadReadList()); 
      },[dispatch])
    
     const renderListItem = itemData => {

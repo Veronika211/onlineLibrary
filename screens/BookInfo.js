@@ -8,13 +8,18 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
+  Alert,
 } from "react-native";
-import { Ionicons, MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+  AntDesign,
+} from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import * as readingListActions from "../store/actions/readingList";
 import CommentList from "../components/CommentList";
-
 
 const BookInfo = (props) => {
   const bookData = useSelector((state) => state.books.bookData);
@@ -22,20 +27,33 @@ const BookInfo = (props) => {
   const dispatch = useDispatch();
   const bookId = props.navigation.getParam("bookId");
   const genreKey = props.navigation.getParam("genreKey");
-
+  //proveravamo da li ima knjige u listi citanja
+  const readingList = useSelector((state) => state.books.readingList);
+  const inList = readingList.find((book) => book.id === bookId);
   var selectedBook = bookData.find((book) => book.id === bookId);
- 
+
   const averageMark = () => {
     var sum = 0;
-    for(let i=0;i<comments.length;i++){
-      sum+=parseInt(comments[i].mark)
-      
+    for (let i = 0; i < comments.length; i++) {
+      sum += parseInt(comments[i].mark);
     }
-     if(sum!=0){
-     return (sum/comments.length).toFixed(2)
-     }
-     return 0;
-  }
+    if (sum != 0) {
+      return (sum / comments.length).toFixed(2);
+    }
+    return 0;
+  };
+
+  const starsMark = () => {
+    let stars = [];
+    for (var i = 1; i <= 5; i++) {
+      let path = <AntDesign name="star" size={17} color="gold" key={i} />;
+      if (i > averageMark()) {
+        path = <AntDesign name="staro" size={17} color="gold" key={i} />;
+      }
+      stars.push(path);
+    }
+    return stars;
+  };
 
   const bookKey = selectedBook.key;
 
@@ -43,7 +61,12 @@ const BookInfo = (props) => {
     props.navigation.setParams({ bookTitle: selectedBook.title });
   }, [selectedBook]);
 
-  const inList = props.navigation.getParam("inList");
+
+
+  const addToReadList = useCallback(async () => {
+    await dispatch(readingListActions.addToReadList(bookId));
+    dispatch(readingListActions.deleteBook(bookId));
+  }, [dispatch, bookId]);
 
   const addToReadingList = useCallback(() => {
     dispatch(readingListActions.addBook(bookId));
@@ -51,6 +74,7 @@ const BookInfo = (props) => {
 
   const deleteFromReadingList = useCallback(() => {
     dispatch(readingListActions.deleteBook(bookId));
+    Alert.alert("Uspešno ste obrisali knjigu iz liste čitanja!");
     props.navigation.navigate("ReadingList");
   }, [dispatch, bookId]);
 
@@ -58,46 +82,54 @@ const BookInfo = (props) => {
     <ScrollView>
       <Image source={{ uri: selectedBook.img }} style={styles.img} />
       <View style={styles.titleCont}>
-      <Text style={styles.title}>{selectedBook.title}</Text>
-      <Text style={styles.author}>{selectedBook.author}</Text>
+        <Text style={styles.title}>{selectedBook.title}</Text>
+        <Text style={styles.author}>{selectedBook.author}</Text>
       </View>
       <View style={styles.row}>
         <View style={styles.column}>
-        <Text style={styles.price}>{selectedBook.price} RSD</Text>
-        <Text style={styles.avgMark}>Prosecna ocena: {averageMark()}</Text>
+          <Text style={styles.price}>{selectedBook.price} RSD</Text>
+          <Text style={styles.avgMark}>Prosecna ocena: {starsMark()}</Text>
         </View>
         <View style={styles.rowChild}>
-        {inList && (
-          <TouchableOpacity
-          style={styles.icon}
-            onPress={() => {
-              deleteFromReadingList();
-            }}
-          >
-            <Ionicons
-              name="trash-outline"
-              size={30}
-              color="black"
-             
-            />
-         
-          </TouchableOpacity>
-        )}
-        {!inList && (
-          <TouchableOpacity
-          style={styles.icon}
-            onPress={() => {
-              addToReadingList();
-            }}
-          >
-            <MaterialIcons name="post-add" size={30} color="black" />
-           
-          </TouchableOpacity>
-        )}
+          {inList && (
+            <View>
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => {
+                  deleteFromReadingList();
+                }}
+              >
+                <Ionicons name="trash-outline" size={30} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => {
+                  addToReadList();
+                }}
+              >
+                <MaterialIcons
+                  name="playlist-add-check"
+                  size={24}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+          {!inList && (
+            <View>
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => {
+                  addToReadingList();
+                }}
+              >
+                <MaterialIcons name="post-add" size={30} color="black" />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-       
       </View>
-     
+
       <View>
         <Text style={styles.titleDes}>Opis knjige</Text>
         <Text style={styles.description}>{selectedBook.description}</Text>
@@ -112,24 +144,24 @@ const BookInfo = (props) => {
         />
       )}
       <View style={styles.view}>
-      <TouchableOpacity
-        style={styles.addBar}
-        onPress={() => {
-          props.navigation.navigate("Comment", {
-            bookId: bookId,
-            bookKey: bookKey,
-            genreKey: genreKey,
-          });
-        }}
-      >
-        <MaterialCommunityIcons
-          name="comment-text-outline"
-          size={23}
-          color="grey"
-        />
+        <TouchableOpacity
+          style={styles.addBar}
+          onPress={() => {
+            props.navigation.navigate("Comment", {
+              bookId: bookId,
+              bookKey: bookKey,
+              genreKey: genreKey,
+            });
+          }}
+        >
+          <MaterialCommunityIcons
+            name="comment-text-outline"
+            size={23}
+            color="grey"
+          />
 
-        <Text style={styles.addTxt}>Ostavite komentar</Text>
-      </TouchableOpacity>
+          <Text style={styles.addTxt}>Ostavite komentar</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -147,7 +179,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom:20
+    marginBottom: 20,
   },
   title: {
     margin: 17,
@@ -156,28 +188,28 @@ const styles = StyleSheet.create({
   },
   author: {
     marginHorizontal: 50,
-    fontSize:17
+    fontSize: 17,
   },
   img: {
     width: "100%",
     height: 250,
   },
-  price:{
+  price: {
     fontSize: 16,
-    marginTop:9
+    marginTop: 9,
   },
-  avgMark:{
-    fontSize:14,
-    marginVertical:5
+  avgMark: {
+    fontSize: 14,
+    marginVertical: 5,
   },
   description: {
     marginHorizontal: 15,
     marginVertical: 17,
   },
-  view:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center'
+  view: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   addBar: {
     flexDirection: "row",
@@ -196,22 +228,23 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginLeft: 13,
   },
-  icon:{
+  icon: {
     borderWidth: 2,
     borderRadius: 30,
     borderColor: "black",
-    padding:6,
-    backgroundColor: 'white'
+    padding: 6,
+    backgroundColor: "white",
+    marginBottom: 4,
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginHorizontal:20,
-    marginBottom:20
+    marginHorizontal: 20,
+    marginBottom: 20,
   },
-  rowChild:{
-    flexDirection:'row'
+  rowChild: {
+    flexDirection: "row",
   },
   titleDes: {
     marginHorizontal: 15,

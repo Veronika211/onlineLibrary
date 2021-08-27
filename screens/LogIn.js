@@ -42,7 +42,7 @@ const formReducer = (state, action) => {
 
 const LogIn = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isShown, setIsShown] = useState(false);
+  const [isShown, setIsShown] = useState(true);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();

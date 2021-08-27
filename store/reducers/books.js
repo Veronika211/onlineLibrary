@@ -1,6 +1,6 @@
 import { LOAD_BOOKS, LOAD_GENRES, FILTER_BOOKS, RELOAD_FILTER } from "../actions/books";
 import { Alert } from "react-native";
-import { LOAD_LIST, ADD_BOOK, REMOVE_BOOK } from "../actions/readingList";
+import { LOAD_LIST, ADD_BOOK, REMOVE_BOOK,ADD_TO_READ,LOAD_READ } from "../actions/readingList";
 
 const initialState = {
   //postavljamo pocetno stanje na stanje ucitano iz baze
@@ -8,7 +8,8 @@ const initialState = {
   //postavljamo prazan niz jer jos nismo nista ubacili u listu citanja
   readingList: [],
   genres: [],
-  filteredBooks: []
+  filteredBooks: [],
+  readList:[]
 };
 
 const booksReducer = (state = initialState, action) => {
@@ -51,6 +52,16 @@ const booksReducer = (state = initialState, action) => {
             ...state,
             filteredBooks: state.bookData
           }
+        case ADD_TO_READ:
+          return{
+            ...state,
+            readList: state.readList.concat(action.book) 
+          }
+          case LOAD_READ:
+            return {
+              ...state,
+              readList: action.readList,
+            };
     default:
       return state;
   }

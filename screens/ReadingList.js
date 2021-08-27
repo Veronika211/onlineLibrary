@@ -8,7 +8,7 @@ import HeaderButton from '../components/UI/HeaderButton';
 const ReadingList = props => {
     const readingListBooks = useSelector(state => state.books.readingList);  
     return readingListBooks.length > 0 ? 
-    <BookItem data={readingListBooks} navigation={props.navigation} inList = {true}/> : 
+    <BookItem data={readingListBooks} navigation={props.navigation}/> : 
     <View style={styles.noBooks}>
     <Text>Nema knjiga u listi citanja!</Text>
     </View>

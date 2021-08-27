@@ -8,7 +8,7 @@ import Homepage from "../screens/Homepage";
 import BookList from "../screens/BookList";
 import BookInfo from "../screens/BookInfo";
 import ReadingList from "../screens/ReadingList";
-import { Ionicons, Entypo, FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons, Entypo, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import LogIn from "../screens/LogIn";
 import StartScreen from "../screens/StartScreen";
@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
 import CommentsEdit from "../screens/CommentsEdit";
 import AllBooks from "../screens/AllBooks";
+import ReadBooksScreen from "../screens/ReadBooksScreen";
 
 const defaultSet = {
   headerStyle: {
@@ -59,7 +60,19 @@ const ReadingL = createStackNavigator(
     defaultNavigationOptions: defaultSet,
   }
 );
-
+const ReadL = createStackNavigator(
+  {
+    ReadL: {
+      screen: ReadBooksScreen,
+    },
+    Info: {
+      screen: BookInfo,
+    },
+  },
+  {
+    defaultNavigationOptions: defaultSet,
+  }
+);
 const ScreenConfig = {
   //Root nam je zapravo ovaj gornji navigator koji kontrolise sve na klik i on je na ovaj nacin ugnjezden u footer
   Root: {
@@ -95,6 +108,23 @@ const ScreenConfig = {
         ),
     },
   },
+  ReadList: {
+    screen: ReadL,
+    navigationOptions:{
+      tabBarLabel: "Lista pročitanih",
+      tabBarIcon: (tabInfo) => {
+        return (
+          <MaterialCommunityIcons name="bookshelf" size={24} color={tabInfo.tintColor} />
+        );
+      },
+      tabBarLabel:
+        Platform.OS === "android" ? (
+          <Text style={{ fontFamily: "arimo" }}>Lista pročitanih</Text>
+        ) : (
+          "Lista pročitanih"
+        ),
+    }
+  }
 };
 const FooterNavigator =
   Platform.OS === "android"
