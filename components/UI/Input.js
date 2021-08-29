@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     flexDirection: "row",
-    justifyContent:"space-between",
-    alignItems:'flex-start',
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     borderBottomColor: "#70012B",
     borderBottomWidth: 1,
   },
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 2,
     paddingVertical: 5,
-    width:'60%'
+    width: "60%",
   },
   errorContainer: {
     marginVertical: 5,
@@ -113,9 +113,7 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 13,
   },
-  icon: {
-    
-  },
+  icon: {},
 });
 
 export default Input;

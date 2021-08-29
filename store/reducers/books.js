@@ -1,15 +1,26 @@
-import { LOAD_BOOKS, LOAD_GENRES, FILTER_BOOKS, RELOAD_FILTER } from "../actions/books";
-import { Alert } from "react-native";
-import { LOAD_LIST, ADD_BOOK, REMOVE_BOOK,ADD_TO_READ,LOAD_READ } from "../actions/readingList";
+import {
+  LOAD_BOOKS,
+  LOAD_GENRES,
+  FILTER_BOOKS,
+  RELOAD_FILTER,
+} from "../actions/books";
+import {
+  LOAD_LIST,
+  ADD_BOOK,
+  REMOVE_BOOK,
+  ADD_TO_READ,
+  LOAD_READ,
+  ADD_GOAL,
+  LOAD_GOAL,
+} from "../actions/readingList";
 
 const initialState = {
-  //postavljamo pocetno stanje na stanje ucitano iz baze
   bookData: [],
-  //postavljamo prazan niz jer jos nismo nista ubacili u listu citanja
   readingList: [],
   genres: [],
   filteredBooks: [],
-  readList:[]
+  readList: [],
+  goal: {},
 };
 
 const booksReducer = (state = initialState, action) => {
@@ -42,30 +53,39 @@ const booksReducer = (state = initialState, action) => {
         ...state,
         genres: action.genreData,
       };
-      case FILTER_BOOKS:
-        return {
-          ...state,
-          filteredBooks: action.books
-        }
-        case RELOAD_FILTER:
-          return{
-            ...state,
-            filteredBooks: state.bookData
-          }
-        case ADD_TO_READ:
-          return{
-            ...state,
-            readList: state.readList.concat(action.book) 
-          }
-          case LOAD_READ:
-            return {
-              ...state,
-              readList: action.readList,
-            };
+    case FILTER_BOOKS:
+      return {
+        ...state,
+        filteredBooks: action.books,
+      };
+    case RELOAD_FILTER:
+      return {
+        ...state,
+        filteredBooks: state.bookData,
+      };
+    case ADD_TO_READ:
+      return {
+        ...state,
+        readList: state.readList.concat(action.book),
+      };
+    case LOAD_READ:
+      return {
+        ...state,
+        readList: action.readList,
+      };
+    case ADD_GOAL:
+      return {
+        ...state,
+        goal: action.goal,
+      };
+    case LOAD_GOAL:
+      return {
+        ...state,
+        goal: action.goal,
+      };
     default:
       return state;
   }
- 
 };
 
 export default booksReducer;

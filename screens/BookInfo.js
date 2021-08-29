@@ -61,8 +61,6 @@ const BookInfo = (props) => {
     props.navigation.setParams({ bookTitle: selectedBook.title });
   }, [selectedBook]);
 
-
-
   const addToReadList = useCallback(async () => {
     await dispatch(readingListActions.addToReadList(bookId));
     dispatch(readingListActions.deleteBook(bookId));
@@ -87,7 +85,7 @@ const BookInfo = (props) => {
       </View>
       <View style={styles.row}>
         <View style={styles.column}>
-          <Text style={styles.price}>{selectedBook.price} RSD</Text>
+          {/* <Text style={styles.price}>{selectedBook.price} RSD</Text> */}
           <Text style={styles.avgMark}>Prosecna ocena: {starsMark()}</Text>
         </View>
         <View style={styles.rowChild}>

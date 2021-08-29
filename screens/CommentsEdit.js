@@ -168,13 +168,13 @@ const Comments = (props) => {
           />
           {commentId ? (
             <View style={styles.button}>
-            <Button
-              title="Izmeni"
-              color="white"
-              onPress={() => {
-                submitHandler();
-              }}
-            />
+              <Button
+                title="Izmeni"
+                color="white"
+                onPress={() => {
+                  submitHandler();
+                }}
+              />
             </View>
           ) : (
             <View style={styles.button}>

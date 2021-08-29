@@ -15,7 +15,6 @@ const GenreItem = (props) => {
   }
 
   return (
-    //TouchableOpacity nam omogucava da kada pritisnemo naziv zanra on nas odvede na stranicu Knjige
     <View style={styles.listItem}>
       <TouchableComponent onPress={props.onSelect}>
         <View style={styles.container}>
@@ -23,8 +22,8 @@ const GenreItem = (props) => {
             {props.title}
           </Text>
           <Text style={styles.booksNum}>
-            Broj naslova: 
-            {" "+props.bookNum}
+            Broj naslova:
+            {" " + props.bookNum}
           </Text>
         </View>
       </TouchableComponent>
@@ -59,11 +58,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: "lora-bold",
-    marginBottom:10
+    marginBottom: 10,
   },
-  booksNum:{
-
-  }
+  booksNum: {},
 });
 
 export default GenreItem;

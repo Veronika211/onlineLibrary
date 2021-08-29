@@ -2,22 +2,21 @@ import Comment from "../../models/comment";
 export const CREATE_COMMENT = "CREATE_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const UPDATE_COMMENT = "UPDATE_COMMENT";
-export const LOAD_COMMENTS = "LOAD_COMMENTS"
-
+export const LOAD_COMMENTS = "LOAD_COMMENTS";
 
 export const loadComments = (bookId) => {
-  return (dispatch,getState) => {
+  return (dispatch, getState) => {
     const books = getState().books.bookData;
-    const selectedBook = books.find(book => book.id == bookId);
-    
+    const selectedBook = books.find((book) => book.id == bookId);
+
     const comments = selectedBook.comments;
-  
-    dispatch({ type: LOAD_COMMENTS, comments: comments});
-  }
+
+    dispatch({ type: LOAD_COMMENTS, comments: comments });
   };
+};
 
 export const deleteComment = (bookKey, genreKey, commentId) => {
-  return async (dispatch,getState) => {
+  return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
       `https://library-app-fe6ce-default-rtdb.europe-west1.firebasedatabase.app/zanrovi/${genreKey}/books/${bookKey}/comments/${commentId}.json?auth=${token}`,
@@ -37,7 +36,7 @@ export const createComment = (bookId, bookKey, genreKey, text, mark) => {
   return async (dispatch, getState) => {
     const mail = getState().auth.email;
     const token = getState().auth.token;
-    const date = new Date().toLocaleDateString()
+    const date = new Date().toLocaleDateString();
     const response = await fetch(
       `https://library-app-fe6ce-default-rtdb.europe-west1.firebasedatabase.app/zanrovi/${genreKey}/books/${bookKey}/comments.json?auth=${token}`,
       {
@@ -64,37 +63,34 @@ export const createComment = (bookId, bookKey, genreKey, text, mark) => {
   };
 };
 
-
 export const updateComment = (bookKey, genreKey, commentId, text, mark) => {
-
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
       `https://library-app-fe6ce-default-rtdb.europe-west1.firebasedatabase.app/zanrovi/${genreKey}/books/${bookKey}/comments/${commentId}.json?auth=${token}`,
       {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           text,
-          mark
-        })
+          mark,
+        }),
       }
     );
 
     if (!response.ok) {
-      throw new Error('Došlo je do greške!');
+      throw new Error("Došlo je do greške!");
     }
-    
+
     dispatch({
       type: UPDATE_COMMENT,
       commentId: commentId,
       comment: {
         text,
-        mark
-      }
+        mark,
+      },
     });
   };
 };
-

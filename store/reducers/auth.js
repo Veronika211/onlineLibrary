@@ -3,19 +3,19 @@ import { AUTHENTICATE, LOGOUT } from "../actions/auth";
 const initialState = {
   token: null,
   userId: null,
-  email: null
+  email: null,
 };
 
-const authReducer =  (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case AUTHENTICATE:
       return {
         token: action.token,
         userId: action.userId,
-        email: action.email
+        email: action.email,
       };
-      case LOGOUT:
-        return initialState;
+    case LOGOUT:
+      return initialState;
     default:
       return state;
   }

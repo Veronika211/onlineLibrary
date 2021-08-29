@@ -21,11 +21,11 @@ const CommentItem = (props) => {
       <View style={styles.firstRow}>
         <View style={styles.firstChild}>
           <Ionicons name="person-circle-outline" size={30} color="black" />
-          <Text style={{marginLeft:5}}>{props.user}</Text>
+          <Text style={{ marginLeft: 5 }}>{props.user}</Text>
         </View>
-        <Text style={{marginTop:8}}>{props.date}</Text>
+        <Text style={{ marginTop: 8 }}>{props.date}</Text>
       </View>
-      <Text style={{marginTop:10}}>Ocena:{" " + props.mark}</Text>
+      <Text style={{ marginTop: 10 }}>Ocena:{" " + props.mark}</Text>
       <Text style={styles.comText}>{props.text}</Text>
 
       {auth && user === props.user && (
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 10,
-    margin:15
+    margin: 15,
   },
   firstRow: {
     flex: 1,
@@ -71,17 +71,17 @@ const styles = StyleSheet.create({
   },
   firstChild: {
     flexDirection: "row",
-    alignItems:'center'
+    alignItems: "center",
   },
   secondRow: {
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "flex-end",
   },
-  comText:{
-    fontSize:15,
-    marginTop:5
-  }
+  comText: {
+    fontSize: 15,
+    marginTop: 5,
+  },
 });
 
 export default CommentItem;

@@ -1,54 +1,109 @@
-import React from 'react'
-import {View,FlatList,StyleSheet} from 'react-native'
-import BookGenre from './BookGenre'
-import { useDispatch, useSelector } from 'react-redux'
-import * as commentsActions from "../store/actions/comments";
+import React from "react";
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  Image,
+} from "react-native";
+import { useSelector } from "react-redux";
+import { AntDesign, Feather } from "@expo/vector-icons";
 
-const BookItem = props => {
-    const dispatch = useDispatch();
-    const genres = useSelector((state) => state.books.genres);
-
-    const renderListItem = itemData =>{
-        for(const key in genres){
-            if(genres[key].books.find(book => book.id === itemData.item.id)){
-            var loadedGenreKey = genres[key].key;
-            break;
-            }
-        }
-        const genreKey = props.genreKey ? props.genreKey : loadedGenreKey
-        return <BookGenre
-         title={itemData.item.title}
-         author = {itemData.item.author}
-         img= {itemData.item.img} 
-         id = {itemData.item.id}
-         onSelect ={() => {
-             dispatch(commentsActions.loadComments(itemData.item.id));
-            if(props.resetInput) props.resetInput();
-             props.navigation.navigate({routeName:'Info', params:{
-                 bookId: itemData.item.id,
-                 inList: props.inList,
-                 genreKey: genreKey
-             }})
-         }}/>
+const BookItem = (props) => {
+  const comments = props.comments;
+  const averageMark = () => {
+    var sum = 0;
+    for (const key in comments) {
+      sum += parseInt(comments[key].mark);
     }
+    if (sum != 0) {
+      return (sum / Object.keys(comments).length).toFixed(2);
+    }
+    return 0;
+  };
 
-    return(
-        <View style={styles.screen}> 
-           <FlatList data={props.data}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderListItem}
-            style={{width:'100%'}}
-           />
+  const starsMark = () => {
+    let stars = [];
+    for (var i = 1; i <= 5; i++) {
+      let path = <AntDesign name="star" size={17} color="gold" key={i} />;
+      if (i > averageMark()) {
+        path = <AntDesign name="staro" size={17} color="gold" key={i} />;
+      }
+      stars.push(path);
+    }
+    return stars;
+  };
+ 
+  return (
+    <View style={styles.container}>
+      <Text>{props.year && props.year}</Text>
+      <TouchableOpacity onPress={props.onSelect}>
+        <View style={styles.book}>
+          <View style={styles.column}>
+            <View style={styles.imageCont}>
+              <Image source={{ uri: props.img }} style={styles.img} />
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.title}>{props.title}</Text>
+              <Text style={styles.author}>{props.author}</Text>
+              <Text style={styles.stars}>
+                {starsMark()} {averageMark()}
+              </Text>
+            </View>
+          </View>
+          <Feather name="info" size={25} color="darkgrey" style={styles.icon} />
         </View>
-    )
-}
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    screen:{
-        flex:1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
+  container: {
+    marginTop: 10,
+  },
+  book: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginVertical: 13,
+    marginHorizontal: 17,
+  },
+  imageCont: {
+    width: 120,
+    height: 150,
+  },
+  column: {
+    flexDirection: "row",
+  },
+  info: {
+    margin: 10,
+    flexShrink: 1,
+  },
+  img: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    borderRadius: 15,
+  },
+  stars: {
+    flexDirection: "row",
+  },
+  icon: {
+    flexDirection: "row",
+    marginTop: 55,
+  },
+  author: {
+    fontSize: 15,
+    marginBottom: 8,
+  },
+  title: {
+    fontFamily: "arimo-bold",
+    fontSize: 17,
+    marginBottom: 4,
+  },
 });
 
 export default BookItem;
