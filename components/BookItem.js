@@ -11,7 +11,10 @@ import { useSelector } from "react-redux";
 import { AntDesign, Feather } from "@expo/vector-icons";
 
 const BookItem = (props) => {
-  const comments = props.comments;
+  const commentsProps = props.comments;
+  const commentsRedux = useSelector(state=> state.comments.comments)
+ const comments = commentsRedux.filter(comment => comment.bookId === props.id)
+
   const averageMark = () => {
     var sum = 0;
     for (const key in comments) {

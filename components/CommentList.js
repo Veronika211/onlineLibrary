@@ -10,7 +10,7 @@ const CommentList = (props) => {
         text={itemData.text}
         user={itemData.userId}
         id={itemData.id}
-        key={itemData.id}
+        key={Math.random().toString()}
         mark={itemData.mark}
         genreKey={props.genreKey}
         bookKey={props.bookKey}

@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export const LOGOUT = "LOGOUT";
 export const AUTHENTICATE = "AUTHENTICATE";
-
+export const CLEAR = "CLEAR"
 let timer;
 
 export const authenticate = (userId, token, email, expiryTime) => {
@@ -32,7 +32,7 @@ export const signup = (email, password) => {
         }),
       }
     );
-
+  
     if (!response.ok) {
       const errorResData = await response.json();
       const errorId = errorResData.error.message;
@@ -44,7 +44,7 @@ export const signup = (email, password) => {
     }
 
     const resData = await response.json();
-
+ 
     dispatch(
       authenticate(
         resData.localId,
@@ -76,12 +76,13 @@ export const login = (email, password) => {
         }),
       }
     );
+ 
     if (!response.ok) {
       const errorResData = await response.json();
       const errorId = errorResData.error.message;
       let message = "Greška!";
       if (errorId === "EMAIL_NOT_FOUND") {
-        message = "Ne postoji korisnik sa ovim mejlom!";
+        message = "Ne postoji korisnik sa ovom e-mail adresom!";
       } else if (errorId === "INVALID_PASSWORD") {
         message = "Netačna šifra!";
       }
@@ -89,7 +90,7 @@ export const login = (email, password) => {
     }
 
     const resData = await response.json();
-
+ 
     dispatch(
       authenticate(
         resData.localId,
@@ -107,16 +108,16 @@ export const login = (email, password) => {
 
 export const logout = () => {
   clearLogoutTimer();
+  clearGoal();
   AsyncStorage.removeItem("userData");
   return { type: LOGOUT };
 };
 
-const clearLogoutTimer = () => {
-  if (timer) {
-    clearTimeout(timer);
+export const clearGoal = () =>{
+  return {
+    type: CLEAR
   }
-};
-
+}
 const setLogoutTimer = (expirationTime) => {
   return (dispatch) => {
     timer = setTimeout(() => {
@@ -135,4 +136,10 @@ const saveDataToStorage = (token, userId, expirationDate, email) => {
       email: email,
     })
   );
+};
+
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
 };

@@ -9,7 +9,7 @@ const CHeaderButton = (props) => {
       {...props}
       IconComponent={Ionicons}
       iconSize={23}
-      color={Platform.OS === "android" ? "white" : "#70012B"}
+      color={Platform.OS === "android" ? "white" : "#06005A"}
     />
   );
 };

@@ -30,10 +30,12 @@ export const loadList = () => {
           author: resData[key].book.author,
           description: resData[key].book.description,
           img: resData[key].book.img,
-          price: resData[key].book.price,
+       
+          comments: resData[key].book.comments
         });
       }
-
+   
+    
       dispatch({ type: LOAD_LIST, readingList: loadedList });
     } catch (err) {
       throw err;
@@ -73,8 +75,8 @@ export const addBook = (bookId) => {
         if (!response.ok) {
           throw new Error("Došlo je do greške!");
         }
-
-        const resData = await response.json();
+        // const resData = await response.json();
+        // console.log(resData)
         Alert.alert("Uspešno ste dodali knjigu u listu čitanja");
         dispatch({
           type: ADD_BOOK,
@@ -98,10 +100,9 @@ export const addBook = (bookId) => {
       );
 
       if (!response.ok) {
-        throw new Error("Došlo je do greška!");
+        throw new Error("Došlo je do greške!");
       }
-
-      const resData = await response.json();
+    
       Alert.alert("Uspešno ste dodali knjigu u listu čitanja");
       dispatch({
         type: ADD_BOOK,
@@ -123,12 +124,13 @@ export const deleteBook = (bookId) => {
       {
         method: "DELETE",
       }
-    );
+    )
 
     if (!response.ok) {
       throw new Error("Došlo je do greške!");
     }
-
+    const data = JSON.stringify(response)
+  
     dispatch({ type: REMOVE_BOOK, bookId: bookId });
   };
 };
@@ -142,7 +144,7 @@ export const loadReadList = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Došlo je do greške!");
+        Alert.alert("Greška prilikom učitavanja liste!", [{ text: "Ok" }]);
       }
 
       const resData = await response.json();
@@ -156,14 +158,16 @@ export const loadReadList = () => {
           author: resData[key].book.author,
           description: resData[key].book.description,
           img: resData[key].book.img,
-          price: resData[key].book.price,
+         
           year: resData[key].book.year,
         });
       }
-
+     
+      // console.log(resData)
       dispatch({ type: LOAD_READ, readList: loadedList });
     } catch (err) {
-      throw err;
+      Alert.alert("Greška prilikom učitavanja liste!", [{ text: "Ok" }]);
+      console.log(err);
     }
   };
 };
@@ -202,8 +206,9 @@ export const addToReadList = (bookId) => {
           throw new Error("Došlo je do greške!");
         }
 
+      
         const resData = await response.json();
-        Alert.alert("Uspešno ste prebacili knjigu u listu pročitanih knjiga!");
+        // console.log(resData)
         dispatch({
           type: ADD_TO_READ,
           book: book,
@@ -230,8 +235,7 @@ export const addToReadList = (bookId) => {
       }
 
       const resData = await response.json();
-      Alert.alert("Uspešno ste prebacili knjigu u listu pročitanih knjiga!");
-
+    
       dispatch({
         type: ADD_TO_READ,
         book: book,
@@ -262,7 +266,8 @@ export const addGoal = (goal) => {
     if (!response.ok) {
       throw new Error("Došlo je do greške!");
     }
-
+    const resData = await response.json();
+    // console.log(resData)
     dispatch({
       type: ADD_GOAL,
       goal: object,
@@ -282,6 +287,8 @@ export const loadGoal = () => {
       var object = resData[key].object;
     }
     if (object === undefined) return;
+    
+   
     dispatch({
       type: LOAD_GOAL,
       goal: object,

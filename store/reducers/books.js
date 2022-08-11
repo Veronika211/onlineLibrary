@@ -3,6 +3,7 @@ import {
   LOAD_GENRES,
   FILTER_BOOKS,
   RELOAD_FILTER,
+  RESET
 } from "../actions/books";
 import {
   LOAD_LIST,
@@ -13,6 +14,9 @@ import {
   ADD_GOAL,
   LOAD_GOAL,
 } from "../actions/readingList";
+import {
+  CLEAR
+} from "../actions/auth";
 
 const initialState = {
   bookData: [],
@@ -83,6 +87,22 @@ const booksReducer = (state = initialState, action) => {
         ...state,
         goal: action.goal,
       };
+    case CLEAR:
+      return{
+        ...state,
+        goal:{},
+        readList:[],
+        readingList:[]
+      }
+      case RESET:
+        return {
+          bookData: [],
+          readingList: [],
+          genres: [],
+          filteredBooks: [],
+          readList: [],
+          goal: {},
+        }
     default:
       return state;
   }

@@ -92,13 +92,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    borderBottomColor: "#70012B",
+    borderBottomColor: "#06005A",
     borderBottomWidth: 1,
   },
   label: {
     fontFamily: "arimo-bold",
     marginVertical: 8,
-    marginTop: 20,
+    marginTop: 20
   },
   input: {
     paddingHorizontal: 2,

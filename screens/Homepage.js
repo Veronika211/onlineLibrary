@@ -15,9 +15,6 @@ const Homepage = (props) => {
   useEffect(() => {
     dispatch(bookActions.loadGenres());
     dispatch(bookActions.loadBooks());
-    dispatch(readingListActions.loadList());
-    dispatch(readingListActions.loadReadList());
-    dispatch(readingListActions.loadGoal());
   }, [dispatch]);
 
   const renderListItem = (itemData) => {
@@ -32,8 +29,7 @@ const Homepage = (props) => {
             params: {
               genreId: itemData.item.id,
               genreTitle: itemData.item.title,
-              genreKey: itemData.item.key,
-              bookNum: bookNum,
+              genreKey: itemData.item.key
             },
           });
         }}

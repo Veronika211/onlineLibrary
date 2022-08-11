@@ -23,13 +23,23 @@ import CommentList from "../components/CommentList";
 
 const BookInfo = (props) => {
   const bookData = useSelector((state) => state.books.bookData);
-  const comments = useSelector((state) => state.comments.comments);
-  const dispatch = useDispatch();
+  const commentsRedux = useSelector((state) => state.comments.comments);
   const bookId = props.navigation.getParam("bookId");
+  const comments = commentsRedux.filter(
+    (comment) => comment.bookId === bookId
+  );
+ 
+  const readList = useSelector((state) => state.books.readList);
+  const dispatch = useDispatch();
+
   const genreKey = props.navigation.getParam("genreKey");
   //proveravamo da li ima knjige u listi citanja
   const readingList = useSelector((state) => state.books.readingList);
   const inList = readingList.find((book) => book.id === bookId);
+  var inReadList;
+  if (readList.length > 0) {
+    inReadList = readList.find((book) => book.id === bookId);
+  } else inReadList = false;
   var selectedBook = bookData.find((book) => book.id === bookId);
 
   const averageMark = () => {
@@ -57,28 +67,33 @@ const BookInfo = (props) => {
 
   const bookKey = selectedBook.key;
 
-  useEffect(() => {
-    props.navigation.setParams({ bookTitle: selectedBook.title });
-  }, [selectedBook]);
+  // useEffect(() => {
+  //   props.navigation.setParams({ bookTitle: selectedBook.title });
+  // }, [selectedBook]);
 
   const addToReadList = useCallback(async () => {
     await dispatch(readingListActions.addToReadList(bookId));
-    dispatch(readingListActions.deleteBook(bookId));
+    await dispatch(readingListActions.deleteBook(bookId));
+    Alert.alert("Uspešno ste prebacili knjigu u listu pročitanih knjiga!");
   }, [dispatch, bookId]);
 
   const addToReadingList = useCallback(() => {
     dispatch(readingListActions.addBook(bookId));
   }, [dispatch, bookId]);
 
-  const deleteFromReadingList = useCallback(() => {
-    dispatch(readingListActions.deleteBook(bookId));
+  const deleteFromReadingList = useCallback(async () => {
+    await dispatch(readingListActions.deleteBook(bookId));
     Alert.alert("Uspešno ste obrisali knjigu iz liste čitanja!");
-    props.navigation.navigate("ReadingList");
+    props.navigation.goBack();
   }, [dispatch, bookId]);
 
   return (
     <ScrollView>
-      <Image source={{ uri: selectedBook.img }} style={styles.img} />
+      <View style={styles.topCont}>
+        <View style={styles.imageCont}>
+          <Image source={{ uri: selectedBook.img }} style={styles.img} />
+        </View>
+      </View>
       <View style={styles.titleCont}>
         <Text style={styles.title}>{selectedBook.title}</Text>
         <Text style={styles.author}>{selectedBook.author}</Text>
@@ -86,34 +101,51 @@ const BookInfo = (props) => {
       <View style={styles.row}>
         <View style={styles.column}>
           {/* <Text style={styles.price}>{selectedBook.price} RSD</Text> */}
-          <Text style={styles.avgMark}>Prosecna ocena: {starsMark()}</Text>
-        </View>
-        <View style={styles.rowChild}>
-          {inList && (
-            <View>
+          <Text style={styles.avgMark}>Prosečna ocena: {starsMark()}</Text>
+          {!inReadList && inList && (
+            <View style={styles.read}>
               <TouchableOpacity
-                style={styles.icon}
-                onPress={() => {
-                  deleteFromReadingList();
-                }}
-              >
-                <Ionicons name="trash-outline" size={30} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.icon}
                 onPress={() => {
                   addToReadList();
                 }}
               >
-                <MaterialIcons
-                  name="playlist-add-check"
-                  size={24}
-                  color="black"
-                />
+                <AntDesign name="checkcircle" size={19} color="#06005A" />
               </TouchableOpacity>
+              <Text style={{ marginLeft: 7, marginTop: 4 }}>
+                Označi kao pročitano
+              </Text>
             </View>
           )}
-          {!inList && (
+        </View>
+        <View style={styles.rowChild}>
+          {!inReadList ? (
+            inList && (
+              <View>
+                <TouchableOpacity
+                  style={styles.icon}
+                  onPress={() => {
+                    deleteFromReadingList();
+                  }}
+                >
+                  <Ionicons name="trash-outline" size={30} color="black" />
+                </TouchableOpacity>
+                {/* <View style={styles.read}>
+              <TouchableOpacity
+               
+                onPress={() => {
+                  addToReadList();
+                }}
+              >
+               <AntDesign name="checkcircle" size={19} color="black" />
+              </TouchableOpacity>
+              <Text style={{marginLeft:7,marginTop:4}}>Označi kao pročitano</Text>
+              </View> */}
+              </View>
+            )
+          ) : (
+            <Text style={{ marginTop: 7 }}>Pročitana</Text>
+          )}
+          {!inReadList && !inList && (
             <View>
               <TouchableOpacity
                 style={styles.icon}
@@ -188,13 +220,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 50,
     fontSize: 17,
   },
+  topCont: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  imageCont: {
+    width: 200,
+    height: 280,
+    margin: 20,
+  },
   img: {
     width: "100%",
-    height: 250,
-  },
-  price: {
-    fontSize: 16,
-    marginTop: 9,
+    height: "100%",
+    resizeMode: "cover",
+    borderRadius: 15,
+    alignSelf: "center",
   },
   avgMark: {
     fontSize: 14,
@@ -231,8 +273,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: "black",
     padding: 6,
-    backgroundColor: "white",
-    marginBottom: 4,
+    width: 47,
+    alignSelf: "flex-end",
+    // backgroundColor: "white",
+    marginBottom: 10,
+    marginRight: 10,
   },
   row: {
     flexDirection: "row",
@@ -243,6 +288,10 @@ const styles = StyleSheet.create({
   },
   rowChild: {
     flexDirection: "row",
+  },
+  read: {
+    flexDirection: "row",
+    marginVertical: 15,
   },
   titleDes: {
     marginHorizontal: 15,

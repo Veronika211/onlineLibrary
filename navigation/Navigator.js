@@ -27,13 +27,14 @@ import LogIn from "../screens/LogIn";
 import StartScreen from "../screens/StartScreen";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
+import * as booksActions from "../store/actions/books"
 import CommentsEdit from "../screens/CommentsEdit";
 import AllBooks from "../screens/AllBooks";
 import ReadBooksScreen from "../screens/ReadBooksScreen";
 
 const defaultSet = {
   headerStyle: {
-    backgroundColor: Platform.OS === "android" ? "#70012B" : "white",
+    backgroundColor: Platform.OS === "android" ? "#06005A" : "white",
   },
   headerTitleStyle: {
     fontFamily: "arimo-bold",
@@ -41,13 +42,15 @@ const defaultSet = {
   headerBackTitleStyle: {
     fontFamily: "arimo",
   },
-  headerTintColor: Platform.OS === "android" ? "white" : "#70012B",
-  headerRight: () => (
-    <Image
-      source={require("../assets/images/logo.png")}
-      style={{ height: 25, width: 25, marginRight: 17, alignSelf: "center" }}
-    />
-  ),
+  headerTintColor: Platform.OS === "android" ? "white" : "#06005A",
+  // headerRight: () => (
+  //   <Image
+  //     source={require("../assets/images/logo.png")}
+  //     style={{ height: 25, width: 25, marginRight: 17, alignSelf: "center" }}
+  //   />
+  // ),
+  // gestureEnabled: true,
+  // animationEnabled: false,
 };
 const Navigator = createStackNavigator(
   {
@@ -111,7 +114,7 @@ const ScreenConfig = {
       tabBarLabel: "Lista čitanja",
       tabBarIcon: (tabInfo) => {
         return (
-          <FontAwesome5 name="book-open" size={24} color={tabInfo.tintColor} />
+          <FontAwesome5 name="book-open" size={22} color={tabInfo.tintColor} />
         );
       },
       tabBarLabel:
@@ -125,12 +128,12 @@ const ScreenConfig = {
   ReadList: {
     screen: ReadL,
     navigationOptions: {
-      tabBarLabel: "Lista pročitanih",
+      tabBarLabel: "Pročitane knjige",
       tabBarIcon: (tabInfo) => {
         return (
           <MaterialCommunityIcons
             name="bookshelf"
-            size={24}
+            size={28}
             color={tabInfo.tintColor}
           />
         );
@@ -139,7 +142,7 @@ const ScreenConfig = {
         Platform.OS === "android" ? (
           <Text style={{ fontFamily: "arimo" }}>Lista pročitanih</Text>
         ) : (
-          "Lista pročitanih"
+          "Pročitane knjige"
         ),
     },
   },
@@ -151,7 +154,7 @@ const FooterNavigator =
         activeBackgroundColor: "#BA275E",
         shifting: false,
         barStyle: {
-          backgroundColor: "#70012B",
+          backgroundColor: "#06005A",
         },
       })
     : createBottomTabNavigator(ScreenConfig, {
@@ -159,7 +162,7 @@ const FooterNavigator =
           labelStyle: {
             fontFamily: "arimo-bold",
           },
-          activeTintColor: "#70012B",
+          activeTintColor: "#06005A",
         },
       });
 
@@ -188,7 +191,7 @@ const MainNavigator = createDrawerNavigator(
   },
   {
     contentOptions: {
-      activeTintColor: "#70012B",
+      activeTintColor: "#06005A",
       labelStyle: {
         fontFamily: "arimo-bold",
       },
@@ -208,6 +211,7 @@ const MainNavigator = createDrawerNavigator(
                     text: "Da",
                     onPress: () => {
                       dispatch(authActions.logout());
+                      // dispatch(booksActions.reset());
                       props.navigation.navigate("LogIn");
                     },
                   },

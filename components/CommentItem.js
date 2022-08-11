@@ -13,7 +13,7 @@ const CommentItem = (props) => {
     dispatch(
       commentsActions.deleteComment(props.bookKey, props.genreKey, props.id)
     );
-    Alert.alert("!", "Uspešno ste obrisali komentar.", [{ text: "Ok" }]);
+    Alert.alert("Uspešno ste obrisali komentar.", "", [{ text: "Ok" }]);
   }, [dispatch]);
 
   return (
@@ -28,7 +28,7 @@ const CommentItem = (props) => {
       <Text style={{ marginTop: 10 }}>Ocena:{" " + props.mark}</Text>
       <Text style={styles.comText}>{props.text}</Text>
 
-      {auth && user === props.user && (
+      {user === props.user && (
         <View style={styles.secondRow}>
           <TouchableOpacity
             onPress={() => {

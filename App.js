@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Font from 'expo-font';
 import Navigator from './navigation/Navigator'
@@ -38,6 +38,10 @@ export default function App() {
       <AppLoading startAsync={fetchFonts} onFinish={() => setFontLoaded(true)} onError={console.warn} />
     );
   }
+
+  // useEffect(async ()=>{
+  //   await Asset.loadAsync([require('./assets/images/booksLogin.png')])
+  // },[])
   //ovde obavijamo navigator sa providerom jer on renderuje sve ono sto se nama pojavljuje na ekranu
   //i sve stranice kojima je potreban state koji se nalazi u store-u
   return (

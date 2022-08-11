@@ -4,6 +4,7 @@ export const LOAD_BOOKS = "LOAD_BOOKS";
 export const LOAD_GENRES = "LOAD_GENRES";
 export const FILTER_BOOKS = "FILTER_BOOKS";
 export const RELOAD_FILTER = "RELOAD_FILTER";
+export const RESET = "RESET";
 
 export const loadBooks = () => {
   return async (dispatch) => {
@@ -49,7 +50,6 @@ export const loadBooks = () => {
             loadedGenres[key].books[key2].img,
             loadedGenres[key].books[key2].author,
             loadedGenres[key].books[key2].description,
-            loadedGenres[key].books[key2].price,
             comments
           )
         );
@@ -79,7 +79,7 @@ export const loadGenres = () => {
         books: resData[key].books,
       });
     }
-
+  
     dispatch({
       type: LOAD_GENRES,
       genreData: loadedGenres,
@@ -108,3 +108,9 @@ export const reload = () => {
     type: RELOAD_FILTER,
   };
 };
+
+export const reset = () => {
+  return {
+    type: RESET
+  }
+}

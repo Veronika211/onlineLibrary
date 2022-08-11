@@ -10,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { Asset, useAssets } from 'expo-asset';
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import Input from "../components/UI/Input";
@@ -41,6 +42,11 @@ const formReducer = (state, action) => {
 };
 
 const LogIn = (props) => {
+  // const [assets] = useAssets([require('../assets/images/booksLogin.png')]);
+
+  // if (!assets) {
+  //   return <ActivityIndicator/>;
+  // }
   const [isLoading, setIsLoading] = useState(false);
   const [isShown, setIsShown] = useState(true);
   const [error, setError] = useState();
@@ -59,7 +65,11 @@ const LogIn = (props) => {
     formIsValid: false,
   });
 
+  // useEffect(async ()=>{
+  //   await Asset.loadAsync([require('../assets/images/booksLogin.png')])
+  // },[])
   useEffect(() => {
+
     if (error) {
       Alert.alert("Greška!", error, [{ text: "OK" }]);
     }
@@ -107,12 +117,12 @@ const LogIn = (props) => {
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      keyboardVerticalOffset={1}
+      keyboardVerticalOffset={0}
       style={styles.screen}
     >
       <View style={styles.imgView}>
         <Image
-          source={require("../assets/images/bookmark.png")}
+          source={require("../assets/images/booksLogin.png")}
           style={styles.img}
         />
       </View>
@@ -197,7 +207,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 10,
-    backgroundColor: "#70012B",
+    backgroundColor: "#06005A",
     padding: 12,
     margin: 20,
     marginTop: 30,
@@ -213,11 +223,11 @@ const styles = StyleSheet.create({
   },
   img: {
     alignSelf: "center",
-    height: 150,
-    width: 130,
+    height: 200,
+    width:240,
   },
   textButton: {
-    color: "#70012B",
+    color: "#06005A",
   },
 });
 

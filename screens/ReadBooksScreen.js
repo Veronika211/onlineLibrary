@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert,Keyboard,TouchableWithoutFeedback } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import BookList from "../components/BookList";
 import { Item, HeaderButtons } from "react-navigation-header-buttons";
 import HeaderButton from "../components/UI/HeaderButton";
 import * as readListActions from "../store/actions/readingList";
 
+const DismissKeyboard = ({children})=>(
+  <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss()}>
+    {children}
+  </TouchableWithoutFeedback>
+)
+
 const ReadBooksScreen = (props) => {
   const readList = useSelector((state) => state.books.readList);
   const dispatch = useDispatch();
   var goal = useSelector((state) => state.books.goal.goal);
+  const user = useSelector((state)=> state.auth.email);
+  if(user === "am@gmail.com"){
+    goal = 10;
+  }
   const date = new Date().toLocaleDateString().substr(6);
   const [value, setValue] = useState("");
  
@@ -18,12 +28,15 @@ const ReadBooksScreen = (props) => {
     for (const key in readList) {
       if (readList[key].year === date) sum++;
     }
-   
+
     return sum;
   };
   useEffect(() => {
+    dispatch(readListActions.loadReadList());
+    dispatch(readListActions.loadGoal());
+
     if (goal === {}) goal = value;
-  }, [value]);
+  }, [value, dispatch]);
 
   const textHandler = (text) => {
     setValue(text);
@@ -40,9 +53,11 @@ const ReadBooksScreen = (props) => {
     var progress = (countBooks() / goal) * 100;
   }
   return (
+    <DismissKeyboard>
     <View style={styles.container}>
       {goal === undefined ? (
         <View style={styles.inputBtn}>
+     
           <TextInput
             value={value}
             placeholder="Unesite godišnji cilj"
@@ -50,17 +65,22 @@ const ReadBooksScreen = (props) => {
             onChangeText={(text) => textHandler(text)}
             style={styles.input}
           />
-          <Button title={"Postavi"} onPress={goalHandler} color="#70012B" />
+      
+          <Button title={"Postavi cilj"} onPress={goalHandler} color="#06005A" />
         </View>
       ) : (
-        <View style={styles.progressRow}>
+        <View
+          style={
+            readList.length > 0 ? styles.progressRow : styles.progressRowUp
+          }
+        >
           <View style={styles.progressBar}>
             <View
               style={{
                 width: `${progress}%`,
                 height: "100%",
                 borderRadius: 20,
-                backgroundColor: "#70012B",
+                backgroundColor: "#06005A",
               }}
             ></View>
           </View>
@@ -71,10 +91,11 @@ const ReadBooksScreen = (props) => {
         <BookList data={readList} navigation={props.navigation} />
       ) : (
         <View style={styles.noBooks}>
-          <Text>Nema knjiga u listi procitanih!</Text>
+          <Text>Nema knjiga u listi pročitanih!</Text>
         </View>
       )}
     </View>
+    </DismissKeyboard>
   );
 };
 
@@ -98,16 +119,24 @@ ReadBooksScreen.navigationOptions = (navigationData) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
     fontFamily: "lora-bold",
-    margin: 15,
+    marginHorizontal: 15,
   },
   noBooks: {
     fontSize: 18,
+    marginTop: 230,
+    fontWeight:"bold"
   },
   input: {
     margin: 10,
+    borderWidth: 0.9,
+    borderRadius: 30,
+    borderColor: "lightgrey",
+    padding:13,
+    width:300,
+    textAlign:'center'
   },
   inputBtn: {
     flexDirection: "column",
@@ -116,6 +145,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     flexDirection: "row",
     alignItems: "center",
+  },
+  progressRowUp: {
+    marginTop: 15,
+    flexDirection: "row",
   },
   progressBar: {
     width: "60%",

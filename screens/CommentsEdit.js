@@ -12,8 +12,10 @@ import {
 import Input from "../components/UI/Input";
 import { useDispatch, useSelector } from "react-redux";
 import * as commentActions from "../store/actions/comments";
+import * as helpers from "../components/helpFunctions"
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -43,6 +45,8 @@ const Comments = (props) => {
   const genreKey = props.navigation.getParam("genreKey");
   const bookId = props.navigation.getParam("bookId");
   const commentId = props.navigation.getParam("commentId");
+  const inReadingList = useSelector(state => state.books.readingList).find(book => book.id === bookId)
+  const inReadList = useSelector(state => state.books.readList).find(book => book.id === bookId)
 
   const updatedComment = useSelector((state) =>
     state.comments.comments.find((comment) => comment.id === commentId)
@@ -70,7 +74,7 @@ const Comments = (props) => {
     }
   }, [error]);
 
-  const submitHandler = useCallback(async () => {
+  const submitHandler = async () => {
     if (!formState.formIsValid) {
       Alert.alert("Greška!", "Proverite da li ste dobro popunili sva polja.", [
         { text: "Ok" },
@@ -88,8 +92,8 @@ const Comments = (props) => {
             commentId,
             formState.inputValues.text,
             formState.inputValues.mark
-          )
-        );
+          )),
+    
         Alert.alert("", "Uspešno ste izmenili komentar!", [{ text: "Ok" }]);
       } else {
         await dispatch(
@@ -100,16 +104,15 @@ const Comments = (props) => {
             formState.inputValues.text,
             formState.inputValues.mark
           )
-        );
+        ),
         Alert.alert("", "Uspešno ste uneli komentar!", [{ text: "Ok" }]);
       }
       props.navigation.goBack();
     } catch (err) {
       setError(err.message);
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
-  }, [dispatch, formState]);
+  };
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -123,32 +126,31 @@ const Comments = (props) => {
     [dispatchFormState]
   );
 
-  if (isLoading) {
-    return (
-      <View>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <View>
+  //       <ActivityIndicator size="large" />
+  //     </View>
+  //   );
+  // }
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={styles.screen}
       behavior="padding"
       keyboardVerticalOffset={100}
+      enabled
     >
-      <ScrollView>
-        <View style={styles.inputContainer}>
+      <ScrollView >
+       <View style={styles.inputContainer}>
           <Input
             id="text"
             label="Unesite komentar"
             errorText="Unesite validan komentar!"
             keyboardType="default"
             autoCapitalize="sentences"
-            autoCorrect
-            returnKeyType="next"
             onInputChange={inputChangeHandler}
             initialValue={updatedComment ? updatedComment.text : ""}
-            initiallyValid={!!updatedComment}
+            initialValidity={!!updatedComment}
             required
             multiline={true}
             numberOfLines={3}
@@ -160,7 +162,6 @@ const Comments = (props) => {
             min={1}
             max={5}
             keyboardType="decimal-pad"
-            returnKeyType="next"
             initialValue={updatedComment ? updatedComment.mark : ""}
             onInputChange={inputChangeHandler}
             required
@@ -187,7 +188,7 @@ const Comments = (props) => {
               />
             </View>
           )}
-        </View>
+          </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -202,14 +203,16 @@ Comments.navigationOptions = (navData) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: 20,
+  margin:20,
+  justifyContent:'center',
+  alignItems:'center'
+  },
+  screen: {
+    flex: 1
   },
   button: {
     marginTop: 10,
-    backgroundColor: "#70012B",
+    backgroundColor: "#06005A",
     padding: 12,
     margin: 20,
     marginTop: 30,
