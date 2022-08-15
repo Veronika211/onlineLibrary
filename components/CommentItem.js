@@ -1,5 +1,12 @@
 import React, { useCallback } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import * as commentsActions from "../store/actions/comments";
@@ -27,7 +34,12 @@ const CommentItem = (props) => {
       </View>
       <Text style={{ marginTop: 10 }}>Ocena:{" " + props.mark}</Text>
       <Text style={styles.comText}>{props.text}</Text>
-
+      {props.image && (
+        <Image
+          style={{ height: 200, width: 200 }}
+          source={{ uri: props.image }}
+        />
+      )}
       {user === props.user && (
         <View style={styles.secondRow}>
           <TouchableOpacity

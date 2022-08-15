@@ -20,15 +20,20 @@ import { TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import * as readingListActions from "../store/actions/readingList";
 import CommentList from "../components/CommentList";
+// import { getStorage, ref, getDownloadURL } from "firebase/app";
+// import firebaseConfig from "./firebaseConfig";
+// import firebase from "firebase/compat/app";
+
+// if (!firebase.apps.length) {
+//   firebase.initializeApp(firebaseConfig);
+// }
 
 const BookInfo = (props) => {
   const bookData = useSelector((state) => state.books.bookData);
   const commentsRedux = useSelector((state) => state.comments.comments);
   const bookId = props.navigation.getParam("bookId");
-  const comments = commentsRedux.filter(
-    (comment) => comment.bookId === bookId
-  );
- 
+  const comments = commentsRedux.filter((comment) => comment.bookId === bookId);
+
   const readList = useSelector((state) => state.books.readList);
   const dispatch = useDispatch();
 
@@ -41,6 +46,22 @@ const BookInfo = (props) => {
     inReadList = readList.find((book) => book.id === bookId);
   } else inReadList = false;
   var selectedBook = bookData.find((book) => book.id === bookId);
+  // const [imageUrl, setImageUrl] = useState([]);
+
+  // useEffect(() => {
+  //   const getImages = async () => {
+  //     comments.forEach(async (comment) => {
+  //       const storage = getStorage();
+  //       const reference = ref(storage, "/" + bookId + comment.userId);
+  //       console.log("ref", reference);
+  //       await getDownloadURL(reference).then((result) => {
+  //         comment.imageUrl = result;
+  //         console.log("result", result);
+  //       });
+  //     });
+  //   };
+  //   getImages();
+  // }, []);
 
   const averageMark = () => {
     var sum = 0;

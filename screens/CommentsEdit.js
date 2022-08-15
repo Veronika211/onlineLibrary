@@ -12,10 +12,13 @@ import {
 import Input from "../components/UI/Input";
 import { useDispatch, useSelector } from "react-redux";
 import * as commentActions from "../store/actions/comments";
-import * as helpers from "../components/helpFunctions"
-
+import * as helpers from "../components/helpFunctions";
+import ImageUploadCamera from "../components/ImageUploadCamera";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/storage";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
-
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -45,8 +48,14 @@ const Comments = (props) => {
   const genreKey = props.navigation.getParam("genreKey");
   const bookId = props.navigation.getParam("bookId");
   const commentId = props.navigation.getParam("commentId");
-  const inReadingList = useSelector(state => state.books.readingList).find(book => book.id === bookId)
-  const inReadList = useSelector(state => state.books.readList).find(book => book.id === bookId)
+  const inReadingList = useSelector((state) => state.books.readingList).find(
+    (book) => book.id === bookId
+  );
+  const inReadList = useSelector((state) => state.books.readList).find(
+    (book) => book.id === bookId
+  );
+  const [cameraClicked, setCameraClicked] = useState(false);
+  const [pickedImage, setPickedImage] = useState("");
 
   const updatedComment = useSelector((state) =>
     state.comments.comments.find((comment) => comment.id === commentId)
@@ -92,9 +101,9 @@ const Comments = (props) => {
             commentId,
             formState.inputValues.text,
             formState.inputValues.mark
-          )),
-    
-        Alert.alert("", "Uspešno ste izmenili komentar!", [{ text: "Ok" }]);
+          )
+        ),
+          Alert.alert("", "Uspešno ste izmenili komentar!", [{ text: "Ok" }]);
       } else {
         await dispatch(
           commentActions.createComment(
@@ -105,6 +114,12 @@ const Comments = (props) => {
             formState.inputValues.mark
           )
         ),
+          dispatchFormState({
+            type: FORM_INPUT_UPDATE,
+            value: "",
+            isValid: false,
+            input: "",
+          });
         Alert.alert("", "Uspešno ste uneli komentar!", [{ text: "Ok" }]);
       }
       props.navigation.goBack();
@@ -126,6 +141,23 @@ const Comments = (props) => {
     [dispatchFormState]
   );
 
+  // //funkcija za dodavanje slike
+  // const uploadImage = async () => {
+  //   const response = await fetch(pickedImage);
+  //   // console.log("picked", pickedImage);
+  //   const blob = await response.blob();
+  //   const filename = bookId + user;
+  //   var ref = firebase.storage().ref().child(filename).put(blob);
+  //   console.log("picked", pickedImage);
+
+  //   try {
+  //     await ref;
+  //     console.log("usao");
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
   // if (isLoading) {
   //   return (
   //     <View>
@@ -140,8 +172,8 @@ const Comments = (props) => {
       keyboardVerticalOffset={100}
       enabled
     >
-      <ScrollView >
-       <View style={styles.inputContainer}>
+      <ScrollView>
+        <View style={styles.inputContainer}>
           <Input
             id="text"
             label="Unesite komentar"
@@ -165,8 +197,20 @@ const Comments = (props) => {
             initialValue={updatedComment ? updatedComment.mark : ""}
             onInputChange={inputChangeHandler}
             required
-            min={1}
           />
+          {cameraClicked ? (
+            <ImageUploadCamera bookId={bookId} />
+          ) : (
+            <View style={styles.button}>
+              <Button
+                title="Unesite fotografiju"
+                color="white"
+                onPress={() => {
+                  setCameraClicked(true);
+                }}
+              />
+            </View>
+          )}
           {commentId ? (
             <View style={styles.button}>
               <Button
@@ -188,7 +232,7 @@ const Comments = (props) => {
               />
             </View>
           )}
-          </View>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -203,12 +247,12 @@ Comments.navigationOptions = (navData) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-  margin:20,
-  justifyContent:'center',
-  alignItems:'center'
+    margin: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
   screen: {
-    flex: 1
+    flex: 1,
   },
   button: {
     marginTop: 10,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TouchableOpacity,
   View,
@@ -9,11 +9,39 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { AntDesign, Feather } from "@expo/vector-icons";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import firebaseConfig from "../screens/firebaseConfig";
+import firebase from "firebase/compat/app";
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const BookItem = (props) => {
   const commentsProps = props.comments;
-  const commentsRedux = useSelector(state=> state.comments.comments)
- const comments = commentsRedux.filter(comment => comment.bookId === props.id)
+  const commentsRedux = useSelector((state) => state.comments.comments);
+  const comments = commentsRedux.filter(
+    (comment) => comment.bookId === props.id
+  );
+
+  useEffect(() => {
+    const getImages = async () => {
+      comments.forEach(async (comment) => {
+        try {
+          const storage = getStorage();
+          const reference = ref(storage, "/" + comment.bookId + comment.userId);
+          console.log("ref", reference);
+          await getDownloadURL(reference).then((result) => {
+            comment.imageUrl = result;
+            console.log("result", result);
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      });
+    };
+    getImages();
+  }, [comments]);
 
   const averageMark = () => {
     var sum = 0;
@@ -37,7 +65,7 @@ const BookItem = (props) => {
     }
     return stars;
   };
- 
+
   return (
     <View style={styles.container}>
       <Text>{props.year && props.year}</Text>

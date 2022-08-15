@@ -15,6 +15,7 @@ const CommentList = (props) => {
         genreKey={props.genreKey}
         bookKey={props.bookKey}
         navigation={props.navigation}
+        image={itemData.imageUrl}
       />
     );
   });

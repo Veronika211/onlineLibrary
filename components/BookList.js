@@ -1,16 +1,24 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import BookItem from "./BookItem";
 import { useDispatch, useSelector } from "react-redux";
 import * as commentsActions from "../store/actions/comments";
+import { getStorage, ref, getDownloadURL } from "firebase/app";
+import firebaseConfig from "../screens/firebaseConfig";
+import firebase from "firebase/compat/app";
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const BookList = (props) => {
   const dispatch = useDispatch();
   const genres = useSelector((state) => state.books.genres);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     dispatch(commentsActions.loadComments());
-  },[])
+  }, []);
+
   const renderListItem = (itemData) => {
     for (const key in genres) {
       if (genres[key].books.find((book) => book.id === itemData.item.id)) {
@@ -18,7 +26,18 @@ const BookList = (props) => {
         break;
       }
     }
-  
+
+    // console.log(itemData.item);
+    //   if(itemData.item){
+    //             const storage = getStorage();
+    //       const reference = ref(storage, "/" + itemData.item.id + itemData.item.comments.mail);
+    //       console.log("ref", reference);
+    //       getDownloadURL(reference).then((result) => {
+    //         itemData.item.comment.image = result;
+    //         console.log("result", result);
+    //   }
+    // }
+
     const genreKey = props.genreKey ? props.genreKey : loadedGenreKey;
     return (
       <BookItem
@@ -28,7 +47,7 @@ const BookList = (props) => {
         id={itemData.item.id}
         year={itemData.item.year}
         comments={itemData.item.comments ? itemData.item.comments : []}
-          onSelect={() => {
+        onSelect={() => {
           if (props.resetInput) props.resetInput();
           props.navigation.navigate({
             routeName: "Info",
